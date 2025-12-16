@@ -1,116 +1,102 @@
-import { User, Lock, ShoppingBag, Heart, MessageSquare } from 'lucide-react';
-import { useDispatch } from 'react-redux';
-import { clearSuccessMessage } from '../../../../features/user/usersSlice';
+import {
+  User,
+  Lock,
+  ShoppingBag,
+  Heart,
+  MessageSquare
+} from "lucide-react";
+import { useDispatch } from "react-redux";
+import { clearSuccessMessage } from "../../../../features/user/usersSlice";
 
-const SidebarLink = ({ Icon, title, sectionName, selectedSection, setSelectedSection }) => {
-    const dispatch = useDispatch();
+const SECTIONS = [
+  { id: "details", label: "Perfil", icon: User },
+  { id: "password", label: "Seguridad", icon: Lock },
+  { id: "orders", label: "Pedidos", icon: ShoppingBag },
+  { id: "wishlist", label: "Favoritos", icon: Heart },
+  { id: "reviews", label: "Reseñas", icon: MessageSquare }
+];
 
-    return (
-        <button
-            className={`w-full flex items-center justify-center lg:justify-start gap-2.5 p-3 rounded-lg transition-all duration-200 text-sm font-medium ${
-                selectedSection === sectionName
-                    ? 'bg-red-600 text-white shadow-md scale-[1.02]'
-                    : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 active:bg-indigo-100'
-            }`}
-            onClick={() => {
-                setSelectedSection(sectionName);
-                dispatch(clearSuccessMessage());
-            }}
-            title={title}
-        >
-            <Icon className="w-5 h-5 flex-shrink-0" />
-            <span className="hidden lg:inline truncate">{title}</span>
-        </button>
-    );
+const SidebarItem = ({ section, active, onClick }) => {
+  const Icon = section.icon;
+
+  return (
+    <button
+      onClick={onClick}
+      className={`
+        group relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium
+        transition-all duration-200
+        ${
+          active
+            ? "bg-slate-900 text-white shadow"
+            : "text-slate-600 hover:bg-slate-100"
+        }
+      `}
+    >
+      <Icon
+        className={`w-5 h-5 ${
+          active ? "text-white" : "text-slate-400 group-hover:text-slate-600"
+        }`}
+      />
+
+      <span>{section.label}</span>
+
+      {active && (
+        <span className="absolute right-3 w-1.5 h-1.5 rounded-full bg-indigo-400" />
+      )}
+    </button>
+  );
 };
 
 const ProfileSidebar = ({ selectedSection, setSelectedSection }) => {
-    return (
-        <>
-            {/* Sidebar para mobile - Horizontal */}
-            <aside className="lg:hidden w-full bg-white p-3 rounded-xl shadow-lg border border-gray-100 flex-shrink-0">
-                <div className="flex gap-1.5 justify-center">
-                    <SidebarLink
-                        Icon={User}
-                        title="Información Personal"
-                        sectionName="details"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                    <SidebarLink
-                        Icon={Lock}
-                        title="Cambiar Contraseña"
-                        sectionName="password"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                    <SidebarLink
-                        Icon={ShoppingBag}
-                        title="Mis Pedidos"
-                        sectionName="orders"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                    <SidebarLink
-                        Icon={Heart}
-                        title="Lista de Deseos"
-                        sectionName="wishlist"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                    <SidebarLink
-                        Icon={MessageSquare}
-                        title="Mis Reseñas"
-                        sectionName="reviews"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                </div>
-            </aside>
+  const dispatch = useDispatch();
 
-            {/* Sidebar para desktop - Vertical */}
-            <aside className="hidden lg:flex flex-col w-64 bg-white p-5 rounded-xl shadow-lg border border-gray-100 flex-shrink-0 h-fit sticky top-24">
-                <h3 className="text-base font-bold text-gray-800 mb-3 pb-2 border-b border-gray-200">Mi cuenta</h3>
-                <div className="space-y-1.5">
-                    <SidebarLink
-                        Icon={User}
-                        title="Información Personal"
-                        sectionName="details"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                    <SidebarLink
-                        Icon={Lock}
-                        title="Cambiar Contraseña"
-                        sectionName="password"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                    <SidebarLink
-                        Icon={ShoppingBag}
-                        title="Mis Pedidos"
-                        sectionName="orders"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                    <SidebarLink
-                        Icon={Heart}
-                        title="Lista de Deseos"
-                        sectionName="wishlist"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                    <SidebarLink
-                        Icon={MessageSquare}
-                        title="Mis Reseñas"
-                        sectionName="reviews"
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                    />
-                </div>
-            </aside>
-        </>
-    );
+  const handleSelect = (id) => {
+    setSelectedSection(id);
+    dispatch(clearSuccessMessage());
+  };
+
+  return (
+    <>
+      {/* Mobile navigation */}
+      <div className="lg:hidden sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-slate-200">
+        <div className="flex justify-around px-2 py-2">
+          {SECTIONS.map((section) => {
+            const Icon = section.icon;
+            const active = selectedSection === section.id;
+
+            return (
+              <button
+                key={section.id}
+                onClick={() => handleSelect(section.id)}
+                className={`flex flex-col items-center gap-1 text-xs font-medium transition ${
+                  active ? "text-indigo-600" : "text-slate-400"
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                <span>{section.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex w-64 flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sticky top-28 h-fit">
+        <h3 className="px-2 mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Mi cuenta
+        </h3>
+
+        {SECTIONS.map((section) => (
+          <SidebarItem
+            key={section.id}
+            section={section}
+            active={selectedSection === section.id}
+            onClick={() => handleSelect(section.id)}
+          />
+        ))}
+      </aside>
+    </>
+  );
 };
 
 export default ProfileSidebar;

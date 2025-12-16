@@ -1,50 +1,77 @@
-import { Link } from 'react-router-dom';
-import { Heart, ImageOff } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { Heart, ImageOff } from "lucide-react";
 
-const WishlistList = ({ wishlist, loading }) => {
-  if (loading) return <p>Cargando...</p>;
-  if (!wishlist || wishlist.length === 0) return <p>No hay productos</p>;
+const WishlistSection = ({ wishlist, loading }) => {
+  if (loading) {
+    return <p className="text-sm text-slate-500">Cargando lista de deseos...</p>;
+  }
+
+  if (!wishlist || wishlist.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-16 text-center">
+        <Heart className="w-12 h-12 text-slate-400 mb-4" />
+        <p className="text-slate-900 font-semibold">Tu lista de deseos está vacía</p>
+        <p className="text-slate-500 text-sm mt-1">
+          Guarda productos que te gusten y vuelve cuando estés listo
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {wishlist.map((item) => {
         const producto = item.productos || {};
 
         return (
           <Link
             key={item.producto_id}
-            to={`/productos/${item.producto_id}`} // <--- aquí
-            className="border rounded-lg p-4 flex flex-col items-center bg-white shadow-sm hover:shadow-md transition-shadow relative"
+            to={`/productos/${item.producto_id}`}
+            className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white hover:shadow-md transition"
           >
-            {item.deseado && (
-              <div className="absolute top-2 right-2 bg-pink-100 rounded-full p-1">
-                <Heart className="w-5 h-5 text-pink-500" />
-              </div>
-            )}
+            {/* Imagen */}
+            <div className="relative h-56 bg-slate-100 overflow-hidden">
+              {producto.imagen ? (
+                <img
+                  src={producto.imagen}
+                  alt={producto.nombre}
+                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center">
+                  <ImageOff className="w-10 h-10 text-slate-400" />
+                </div>
+              )}
 
-            {producto.imagen ? (
-              <img
-                src={producto.imagen}
-                alt={producto.nombre}
-                className="w-32 h-32 object-cover rounded-md mb-2"
-              />
-            ) : (
-              <div className="w-32 h-32 flex items-center justify-center bg-gray-100 rounded-md mb-2">
-                <ImageOff className="w-10 h-10 text-gray-400" />
-              </div>
-            )}
+              {/* Heart */}
+              {item.deseado && (
+                <div className="absolute top-3 right-3 rounded-full bg-white/90 p-2 shadow">
+                  <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
+                </div>
+              )}
+            </div>
 
-            <p className="text-sm font-semibold text-gray-800 text-center truncate">
-              {producto.nombre}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
-              ${producto.precio?.toFixed(2) || '0.00'}
-            </p>
+            {/* Info */}
+            <div className="p-4">
+              <p className="font-semibold text-slate-900 text-sm truncate">
+                {producto.nombre}
+              </p>
+
+              <div className="mt-2 flex items-center justify-between">
+                <span className="text-base font-bold text-slate-900">
+                  ${producto.precio?.toFixed(2) || "0.00"}
+                </span>
+
+                <span className="text-xs font-medium text-indigo-600 group-hover:underline">
+                  Ver producto
+                </span>
+              </div>
+            </div>
           </Link>
         );
       })}
-    </div>
+    </section>
   );
 };
 
-export default WishlistList;
+export default WishlistSection;

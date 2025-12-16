@@ -1,142 +1,146 @@
-// src/components/profile/PasswordChangeForm.jsx
-import { useDispatch } from 'react-redux';
-import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
-import { updateUserPassword, clearSuccessMessage } from '../../../../features/user/usersSlice'; // Asegúrate de la ruta
-import { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { AlertCircle, CheckCircle, Loader2, ShieldCheck, Lock } from "lucide-react";
+import { updateUserPassword, clearSuccessMessage } from "../../../../features/user/usersSlice";
+import { useState } from "react";
 
+const PasswordSecuritySection = ({ loading, error, successMessage }) => {
+  const dispatch = useDispatch();
 
+  const [form, setForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
 
+  const [localError, setLocalError] = useState(null);
 
-const PasswordChangeForm = ({ loading, error, successMessage }) => {
-    const dispatch = useDispatch();
-    const [formData, setFormData] = useState({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLocalError(null);
+    dispatch(clearSuccessMessage());
+
+    if (form.newPassword !== form.confirmPassword) {
+      setLocalError("Las contraseñas no coinciden.");
+      return;
+    }
+
+    if (form.newPassword.length < 8) {
+      setLocalError("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+
+    dispatch(updateUserPassword({
+      currentPassword: form.currentPassword,
+      newPassword: form.newPassword
+    }));
+
+    setForm({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: ""
     });
-    const [localError, setLocalError] = useState(null);
+  };
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+  return (
+    <section className="space-y-6">
+      {/* Header */}
+      <div className="flex items-start gap-3">
+        <div className="mt-1 text-slate-400">
+          <ShieldCheck className="w-6 h-6" />
+        </div>
+        <div>
+          <h3 className="text-lg font-bold text-slate-900">
+            Seguridad de la cuenta
+          </h3>
+          <p className="text-sm text-slate-500">
+            Actualiza tu contraseña para mantener tu cuenta protegida
+          </p>
+        </div>
+      </div>
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setLocalError(null);
-        dispatch(clearSuccessMessage()); // Limpiar mensaje global de éxito
-
-        if (formData.newPassword !== formData.confirmPassword) {
-            setLocalError('Las nuevas contraseñas no coinciden.');
-            return;
-        }
-
-        if (formData.newPassword.length < 8) {
-            setLocalError('La nueva contraseña debe tener al menos 8 caracteres.');
-            return;
-        }
-
-        dispatch(updateUserPassword({ 
-            currentPassword: formData.currentPassword,
-            newPassword: formData.newPassword 
-        }));
+      {/* Card */}
+      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 space-y-5 max-w-xl">
         
-        // Limpiar el formulario después del envío
-        setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    };
+        {/* Feedback */}
+        {successMessage && (
+          <div className="flex gap-2 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-700">
+            <CheckCircle className="w-4 h-4 mt-0.5" />
+            {successMessage}
+          </div>
+        )}
 
-    return (
-        <form onSubmit={handleSubmit} className="space-y-5">
-            <h3 className="text-lg font-bold text-gray-800 pb-2 border-b border-gray-200">Cambiar Contraseña</h3>
+        {(error || localError) && (
+          <div className="flex gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            <AlertCircle className="w-4 h-4 mt-0.5" />
+            {error || localError}
+          </div>
+        )}
 
-            {/* Mensajes de feedback (Redux) */}
-            {successMessage && (
-                <div className="p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg flex items-start gap-2 text-sm">
-                    <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span>{successMessage}</span>
-                </div>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="label">Contraseña actual</label>
+            <input
+              type="password"
+              name="currentPassword"
+              value={form.currentPassword}
+              onChange={handleChange}
+              className="input bg-slate-50 border-slate-200"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label">Nueva contraseña</label>
+            <input
+              type="password"
+              name="newPassword"
+              value={form.newPassword}
+              onChange={handleChange}
+              className="input bg-slate-50 border-slate-200"
+              minLength={8}
+              required
+            />
+            <p className="hint">Mínimo 8 caracteres</p>
+          </div>
+
+          <div>
+            <label className="label">Confirmar nueva contraseña</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              className="input bg-slate-50 border-slate-200"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 transition disabled:opacity-50"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Actualizando…
+              </>
+            ) : (
+              <>
+                <Lock className="w-4 h-4" />
+                Cambiar contraseña
+              </>
             )}
-            {error && (
-                <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg flex items-start gap-2 text-sm">
-                    <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span>{error}</span>
-                </div>
-            )}
-            {/* Mensaje de feedback (Local) */}
-            {localError && (
-                <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg flex items-start gap-2 text-sm">
-                    <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span>{localError}</span>
-                </div>
-            )}
-
-            <div className="space-y-4">
-                {/* Inputs de Contraseña (mismo código) */}
-                <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5" htmlFor="currentPassword">
-                        Contraseña Actual
-                    </label>
-                    <input
-                        type="password"
-                        id="currentPassword"
-                        name="currentPassword"
-                        value={formData.currentPassword}
-                        onChange={handleChange}
-                        className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all text-sm"
-                        required
-                    />
-                </div>
-                
-                <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5" htmlFor="newPassword">
-                        Nueva Contraseña
-                    </label>
-                    <input
-                        type="password"
-                        id="newPassword"
-                        name="newPassword"
-                        value={formData.newPassword}
-                        onChange={handleChange}
-                        className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all text-sm"
-                        required
-                        minLength={8}
-                    />
-                    <p className="mt-1.5 text-xs text-gray-500">Mínimo 8 caracteres</p>
-                </div>
-
-                <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5" htmlFor="confirmPassword">
-                        Confirmar Nueva Contraseña
-                    </label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all text-sm"
-                        required
-                    />
-                </div>
-            </div>
-
-            <button
-                type="submit"
-                className={`w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-lg shadow-md text-sm font-semibold text-white ${
-                    loading ? 'bg-red-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700 active:bg-red-800'
-                } transition-all duration-200 transform hover:scale-[1.02]`}
-                disabled={loading}
-            >
-                {loading ? (
-                    <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Cambiando...</span>
-                    </>
-                ) : (
-                    'Cambiar Contraseña'
-                )}
-            </button>
+          </button>
         </form>
-    );
+      </div>
+    </section>
+  );
 };
 
-export default PasswordChangeForm;
+export default PasswordSecuritySection;

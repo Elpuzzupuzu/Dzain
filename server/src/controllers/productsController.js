@@ -7,81 +7,71 @@ export const ProductsController = {
 
 
 async getAllProducts(req, res, next) {
-    try {
-        console.log("──────────────────────────────────────────");
-        console.log("📥 GET /products → Parámetros recibidos (RAW):");
-        console.log("query:", req.query);
+  try {
+    const {
+      page = 1,
+      limit = 10,
+      mainCategoryId,
+      subCategoryId,
+      searchQuery,
+      minPrice,
+      maxPrice
+    } = req.query;
 
-        const { 
-            page = 1, 
-            limit = 10,
-            mainCategoryId, 
-            subCategoryId,
-            searchQuery,
-            minPrice,
-            maxPrice
-        } = req.query;
+    const parsedLimit = Number(limit);
+    let parsedPage = Number(page);
 
-        console.log("📦 GET /products → Parámetros procesados:");
-        console.log({
-            page: Number(page),
-            limit: Number(limit),
-            mainCategoryId: mainCategoryId ?? null,
-            subCategoryId: subCategoryId ?? null,
-            searchQuery: searchQuery ?? "",
-            minPrice: minPrice ?? null,
-            maxPrice: maxPrice ?? null
-        });
+    // 1️⃣ Primera consulta SOLO para obtener total
+    const initialResult = await ProductsService.getAllProducts(
+      1,
+      parsedLimit,
+      mainCategoryId || null,
+      subCategoryId || null,
+      searchQuery || "",
+      minPrice || null,
+      maxPrice || null
+    );
 
-        console.log("🚀 Enviando a ProductsService.getAllProducts...");
-        
+    const total = initialResult.total;
+    const totalPages = Math.max(1, Math.ceil(total / parsedLimit));
 
-        // Obtener productos desde el servicio
-        const products = await ProductsService.getAllProducts(
-            Number(page), 
-            Number(limit), 
-            mainCategoryId || null,
-            subCategoryId || null,
-            searchQuery || "",
-            minPrice || null,
-            maxPrice || null
-        );
-
-        console.log("📤 Respuesta de ProductsService:");
-        console.log({
-            count: products?.products?.length || 0,
-            total: products?.total,
-        });
-
-        console.log("──────────────────────────────────────────");
-
-        // Respuesta cuando no hay productos
-        if (!products || products.products.length === 0) {
-            return res.status(200).json({ 
-                products: [], 
-                total: 0, 
-                page: Number(page), 
-                limit: Number(limit) 
-            });
-        }
-
-        // Respuesta normal
-        res.status(200).json(products);
-
-    } catch (error) {
-
-        console.error("❌ Error detallado al obtener productos:");
-        console.error(error);
-
-        next({
-            message: error.message || "Ocurrió un error al obtener productos",
-            status: 500,
-            stack: error.stack,
-        });
+    // 2️⃣ Prevenir página fantasma
+    if (parsedPage > totalPages) {
+      parsedPage = totalPages;
     }
+
+    if (parsedPage < 1) {
+      parsedPage = 1;
+    }
+
+    // 3️⃣ Consulta final con página válida
+    const products = await ProductsService.getAllProducts(
+      parsedPage,
+      parsedLimit,
+      mainCategoryId || null,
+      subCategoryId || null,
+      searchQuery || "",
+      minPrice || null,
+      maxPrice || null
+    );
+
+    return res.status(200).json({
+      products: products.products,
+      total,
+      page: parsedPage,
+      limit: parsedLimit,
+      totalPages
+    });
+
+  } catch (error) {
+    next({
+      message: error.message || "Error al obtener productos",
+      status: 500,
+      stack: error.stack
+    });
+  }
 }
 ,
-
 
 async searchProducts(req, res, next) {
   try {

@@ -1,84 +1,77 @@
-// src/components/profile/ProfilePictureSection.jsx
+import { Camera } from "lucide-react";
+import { getInitials } from "../utils/profileUtils";
 
-import { Camera } from 'lucide-react';
-// Asumo que getInitials es una función separada que maneja la lógica de iniciales
-import { getInitials } from '../utils/profileUtils'; 
-
-const ProfilePictureSection = ({ user, isLoading }) => {
-    
-    // Log para depuración
-    if (process.env.NODE_ENV === 'development') {
-        // console.log(
-        //     '[ProfilePictureSection] Estado de render:', 
-        //     {
-        //         isLoading: isLoading,
-        //         userExists: !!user,
-        //         userNameAvailable: !!user?.nombre,
-        //         renderMode: (isLoading || !user || !user.nombre) ? 'SKELETON/LOADING' : 'DATA_READY'
-        //     }
-        // );
-    }
-
-    // -----------------------------------------------------
-    // 🚩 CAMBIO CLAVE: Manejar el estado de Carga/Vacío
-    // -----------------------------------------------------
-    if (isLoading || !user || !user.nombre) {
-        // Muestra un skeleton loader mientras los datos se cargan
-        return (
-            <div className="flex flex-col items-center text-center mb-4 pb-4 border-b border-gray-200 animate-pulse">
-                <div className="w-28 h-28 rounded-full bg-gray-200 border-2 border-indigo-100 shadow-lg mb-2"></div>
-                <div className="h-6 w-3/5 bg-gray-200 rounded-md mb-1.5"></div>
-                <div className="h-4 w-1/3 bg-gray-200 rounded-md mb-2"></div>
-                <div className="h-6 w-1/4 bg-indigo-100 rounded-full"></div>
-            </div>
-        );
-    }
-    // -----------------------------------------------------
-    
-    // Si llegamos aquí, user tiene los datos completos.
-    const userName = user.name || (user.nombre && user.apellido ? `${user.nombre} ${user.apellido}` : 'Usuario');
-    const userInitials = getInitials(userName);
-    const profilePicture = user?.foto_perfil;
-
+const ProfileHero = ({ user, isLoading }) => {
+  if (isLoading || !user) {
     return (
-        <div className="flex flex-col items-center text-center mb-4 pb-4 border-b border-gray-200">
-            {/* Contenedor de la imagen/avatar */}
-            <div className="relative group mb-2">
-                {profilePicture ? (
-                    <img
-                        src={profilePicture}
-                        alt={`${userName}'s profile`}
-                        className="w-20 h-20 sm:w-28 sm:h-28 rounded-full object-cover border-2 border-indigo-100 shadow-lg"
-                        onError={(e) => {
-                            console.error("Error cargando imagen de perfil:", profilePicture);
-                            e.target.style.display = 'none';
-                        }}
-                    />
-                ) : (
-                    <div className="w-20 h-20 sm:w-28 sm:h-28 flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-2xl sm:text-3xl rounded-full shadow-lg border-2 border-indigo-100">
-                        {userInitials}
-                    </div>
-                )}
-                
-                {/* Botón para cambiar foto (funcionalidad pendiente) */}
-                <button 
-                    className="absolute bottom-0 right-0 bg-indigo-600 hover:bg-indigo-700 text-white p-1.5 sm:p-2 rounded-full shadow-md transition-all duration-200"
-                    title="Cambiar foto de perfil"
-                >
-                    <Camera className="w-3 h-3 sm:w-4 sm:h-4" />
-                </button>
-            </div>
-
-            {/* Información del usuario */}
-            <div>
-                <h2 className="text-lg sm:text-2xl font-bold text-gray-900 mb-0.5 sm:mb-1">{userName}</h2>
-                <p className="text-xs sm:text-sm text-gray-600 mb-1.5 sm:mb-2">{user.correo || user.email}</p>
-                <span className="inline-flex items-center px-2.5 py-0.5 sm:px-3 sm:py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold">
-                    {user.rol ? user.rol.charAt(0).toUpperCase() + user.rol.slice(1) : 'Cliente'}
-                </span>
-            </div>
+      <div className="rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 p-8 animate-pulse">
+        <div className="flex items-center gap-6">
+          <div className="w-24 h-24 rounded-full bg-slate-300" />
+          <div className="space-y-3">
+            <div className="h-6 w-48 bg-slate-300 rounded" />
+            <div className="h-4 w-32 bg-slate-300 rounded" />
+          </div>
         </div>
+      </div>
     );
+  }
+
+  const userName =
+    user.name ||
+    (user.nombre && user.apellido
+      ? `${user.nombre} ${user.apellido}`
+      : "Usuario");
+
+  const initials = getInitials(userName);
+
+  return (
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6 sm:p-8">
+      {/* fondo decorativo */}
+      <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-200/30 rounded-full blur-3xl" />
+
+      <div className="relative flex flex-col sm:flex-row items-center gap-6">
+        {/* Avatar */}
+        <div className="relative group">
+          {user.foto_perfil ? (
+            <img
+              src={user.foto_perfil}
+              alt={userName}
+              className="w-28 h-28 rounded-full object-cover ring-4 ring-white shadow-lg"
+            />
+          ) : (
+            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center text-3xl font-bold shadow-lg">
+              {initials}
+            </div>
+          )}
+
+          {/* acción */}
+          <button
+            className="absolute bottom-1 right-1 bg-slate-900 text-white p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
+            title="Cambiar foto"
+          >
+            <Camera className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Info */}
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            {userName}
+          </h1>
+
+          <p className="text-slate-600 text-sm mt-1">
+            {user.correo || user.email}
+          </p>
+
+          <span className="inline-flex mt-3 items-center rounded-full bg-indigo-600/10 text-indigo-700 px-3 py-1 text-xs font-semibold">
+            {user.rol
+              ? user.rol.charAt(0).toUpperCase() + user.rol.slice(1)
+              : "Cliente"}
+          </span>
+        </div>
+      </div>
+    </section>
+  );
 };
 
-export default ProfilePictureSection;
+export default ProfileHero;

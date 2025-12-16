@@ -8,118 +8,110 @@ const UserReviewsList = ({ userId }) => {
   const dispatch = useDispatch();
   const { reviews, loading, error } = useSelector((state) => state.user);
 
-  // 🔹 Cargar reseñas al montar
   useEffect(() => {
     if (userId) {
-      // console.log("[UserReviewsList] Cargando reseñas para userId:", userId);
       dispatch(fetchUserReviews(userId));
     }
   }, [userId, dispatch]);
 
+  /* ---------- Loading ---------- */
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-12">
-        <p className="text-slate-600 text-sm font-medium">Cargando reseñas...</p>
+      <div className="flex justify-center p-16 text-sm text-slate-500">
+        Cargando tus reseñas...
       </div>
     );
   }
 
+  /* ---------- Error ---------- */
   if (error) {
     return (
-      <div className="p-5 bg-red-50 border border-red-200 rounded-lg">
-        <p className="text-red-700 text-sm font-medium">Error: {error}</p>
+      <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        Error: {error}
       </div>
     );
   }
 
+  /* ---------- Empty state ---------- */
   if (!reviews || reviews.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-16 bg-slate-50 border border-slate-200 rounded-lg">
-        <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-5">
-          <MessageSquare className="w-10 h-10 text-slate-400" strokeWidth={1.5} />
-        </div>
-        <p className="text-slate-900 font-semibold text-base">Sin reseñas</p>
-        <p className="text-slate-500 text-sm mt-1.5">Tus reseñas de productos aparecerán aquí</p>
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-16 text-center">
+        <MessageSquare className="w-12 h-12 text-slate-400 mb-4" />
+        <p className="font-semibold text-slate-900">Aún no has escrito reseñas</p>
+        <p className="text-slate-500 text-sm mt-1">
+          Tus opiniones sobre los productos aparecerán aquí
+        </p>
       </div>
     );
   }
 
+  /* ---------- Reviews feed ---------- */
   return (
-    <div className="space-y-3">
+    <section className="space-y-4">
       {reviews.map((review, i) => {
         const producto = review.productos || {};
-        const img = producto.imagen;
-        const nombre = producto.nombre || "Producto desconocido";
-        const titulo = review.titulo_reseña || "Sin título";
-
-        // Aseguramos rango 1-5
         const rating = Math.min(Math.max(review.calificacion || 0, 0), 5);
 
-        // console.log("[UserReviewsList] Renderizando review:", review);
-
         return (
-          <div
+          <article
             key={review.producto_id || i}
-            className="bg-white border border-slate-200 rounded-lg hover:border-slate-300 hover:shadow-sm transition-all duration-200"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-sm transition"
           >
-            <div className="p-5">
-              <div className="flex items-start gap-4">
-                {/* Imagen del producto */}
-                {img ? (
-                  <img
-                    src={img}
-                    alt={nombre}
-                    className="w-14 h-14 rounded object-cover border border-slate-200 bg-white flex-shrink-0"
-                  />
-                ) : (
-                  <div className="w-14 h-14 flex items-center justify-center bg-slate-100 border border-slate-200 rounded flex-shrink-0">
-                    <ImageOff className="w-6 h-6 text-slate-400" strokeWidth={2} />
-                  </div>
-                )}
-
-                {/* Contenido */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-slate-900 text-sm truncate">
-                        {nombre}
-                      </p>
-                      <p className="text-slate-600 text-sm font-medium mt-0.5">
-                        {titulo}
-                      </p>
-                    </div>
-
-                    {/* Estrellas */}
-                    <div className="flex gap-0.5 flex-shrink-0">
-                      {[...Array(5)].map((_, idx) => (
-                        <Star
-                          key={idx}
-                          className="w-4 h-4"
-                          fill={idx < rating ? "#f59e0b" : "none"}
-                          stroke={idx < rating ? "#f59e0b" : "#cbd5e1"}
-                          strokeWidth={2}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Fecha */}
-                  <p className="text-xs text-slate-500 font-medium">
-                    {review.fecha_reseña
-                      ? new Date(review.fecha_reseña).toLocaleDateString('es-MX', { 
-                          year: 'numeric', 
-                          month: 'short', 
-                          day: 'numeric' 
-                        })
-                      : "Fecha no disponible"}
-                  </p>
+            <div className="flex gap-4">
+              {/* Producto */}
+              {producto.imagen ? (
+                <img
+                  src={producto.imagen}
+                  alt={producto.nombre}
+                  className="w-14 h-14 rounded-lg object-cover border border-slate-200"
+                />
+              ) : (
+                <div className="w-14 h-14 flex items-center justify-center bg-slate-100 border border-slate-200 rounded-lg">
+                  <ImageOff className="w-5 h-5 text-slate-400" />
                 </div>
+              )}
+
+              {/* Contenido */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-semibold text-slate-900 truncate">
+                      {producto.nombre || "Producto"}
+                    </p>
+                    <p className="text-sm text-slate-600 mt-0.5">
+                      {review.titulo_reseña || "Sin título"}
+                    </p>
+                  </div>
+
+                  {/* Rating */}
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, idx) => (
+                      <Star
+                        key={idx}
+                        className="w-4 h-4"
+                        fill={idx < rating ? "#f59e0b" : "none"}
+                        stroke={idx < rating ? "#f59e0b" : "#cbd5e1"}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Fecha */}
+                <p className="text-xs text-slate-500 mt-2">
+                  {review.fecha_reseña
+                    ? new Date(review.fecha_reseña).toLocaleDateString("es-MX", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "Fecha no disponible"}
+                </p>
               </div>
             </div>
-          </div>
+          </article>
         );
       })}
-    </div>
+    </section>
   );
 };
 
