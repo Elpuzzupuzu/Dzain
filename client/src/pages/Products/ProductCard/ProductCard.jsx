@@ -12,32 +12,32 @@ const ProductCard = ({ product, viewMode = 'grid', onAddToCart }) => {
   const isAuthenticated = useSelector((state) => !!state.user.user);
   const { notify } = useNotification();
 
+  // ==========================
+  // FIX NaN EN ESTRELLAS
+  // ==========================
+  const safeId = Number(product?.id) || 0;
+
   const tempStars = 4;
-  const rating = (4 + (product.id * 0.1) % 1).toFixed(1);
-  const reviews = Math.floor((product.id * 7) % 50) + 10;
+  const rating = (4 + (safeId * 0.1) % 1).toFixed(1);
+  const reviews = Math.floor((safeId * 7) % 50) + 10;
 
-const handleToggleLike = async (e) => {
-  e.stopPropagation();
-  e.preventDefault();
+  const handleToggleLike = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
 
-  if (!isAuthenticated) {
-    notify("Debes iniciar sesión para usar favoritos ❤️", "auth_required");
-    return;
-  }
+    if (!isAuthenticated) {
+      notify("Debes iniciar sesión para usar favoritos ❤️", "auth_required");
+      return;
+    }
 
-  const result = await toggleWishlist(product.id);
+    const result = await toggleWishlist(product.id);
 
-  // console.log("Resultado del toggleWishlist:", result);
-
-  if (result?.added === true) {
-    notify(`"${product.name}" añadido a tu wishlist ❤️`, "wishlist_added");
-  } 
-  else if (result?.removed === true) {
-    notify(`"${product.name}" eliminado de tu wishlist`, "wishlist_removed");
-  }
-};
-
-
+    if (result?.added === true) {
+      notify(`"${product.name}" añadido a tu wishlist ❤️`, "wishlist_added");
+    } else if (result?.removed === true) {
+      notify(`"${product.name}" eliminado de tu wishlist`, "wishlist_removed");
+    }
+  };
 
   const handleAddToCartClick = (e) => {
     e.stopPropagation();
@@ -50,32 +50,30 @@ const handleToggleLike = async (e) => {
     onAddToCart(product);
   };
 
-  const renderStars = () => {
-    return [...Array(5)].map((_, i) => (
+  const renderStars = () =>
+    [...Array(5)].map((_, i) => (
       <Star
         key={i}
-        className={`w-3 h-3 ${i < tempStars ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
+        className={`w-3 h-3 ${
+          i < tempStars ? 'text-amber-400 fill-amber-400' : 'text-gray-300'
+        }`}
       />
     ));
-  };
 
-  // ============================================
-  // AJUSTE CRÍTICO: evitar evaluar mientras carga
-  // ============================================
+  // Evitar evaluar mientras carga wishlist
   const liked = !isLoading && isInWishlist(product.id);
 
-  // ============================================
-  //                 VIEW GRID
-  // ============================================
+  // ==========================
+  // VIEW GRID
+  // ==========================
   if (viewMode === 'grid') {
     return (
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden transition-all duration-200 group relative flex flex-col h-full hover:shadow-lg">
-
         <Link to={`/productos/${product.id}`} className="block relative">
           <div className="relative overflow-hidden bg-white p-3">
             <div className="aspect-square w-full flex items-center justify-center">
               {!imageLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-50 animate-pulse" />
+                <div className="absolute inset-0 bg-gray-50 animate-pulse" />
               )}
               <img
                 src={product.image}
@@ -87,12 +85,13 @@ const handleToggleLike = async (e) => {
               />
             </div>
 
-            {/* ❤️ BOTÓN FAVORITOS */}
             <button
               aria-label="Agregar a favoritos"
               onClick={handleToggleLike}
               className={`absolute top-2 right-2 p-1.5 rounded-full backdrop-blur-sm transition-all duration-200 ${
-                liked ? 'bg-red-500 text-white' : 'bg-white/80 text-gray-600 hover:bg-white hover:text-red-500'
+                liked
+                  ? 'bg-red-500 text-white'
+                  : 'bg-white/80 text-gray-600 hover:bg-white hover:text-red-500'
               }`}
             >
               <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-current' : ''}`} />
@@ -129,9 +128,9 @@ const handleToggleLike = async (e) => {
     );
   }
 
-  // ============================================
-  //                 VIEW LIST
-  // ============================================
+  // ==========================
+  // VIEW LIST
+  // ==========================
   return (
     <div className="bg-white rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200 overflow-hidden">
       <div className="p-3 sm:p-4 flex flex-col sm:flex-row gap-3 sm:gap-4 items-start">
@@ -148,12 +147,13 @@ const handleToggleLike = async (e) => {
             />
           </div>
 
-          {/* ❤️ mobile only */}
           <button
             aria-label="Agregar a favoritos"
             onClick={handleToggleLike}
             className={`sm:hidden absolute top-2 right-2 p-2 rounded-full backdrop-blur-sm transition-all duration-200 shadow-md ${
-              liked ? 'bg-red-500 text-white' : 'bg-white/90 text-gray-600 hover:bg-white hover:text-red-500'
+              liked
+                ? 'bg-red-500 text-white'
+                : 'bg-white/90 text-gray-600 hover:bg-white hover:text-red-500'
             }`}
           >
             <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
@@ -183,13 +183,14 @@ const handleToggleLike = async (e) => {
           </div>
         </div>
 
-        {/* ❤️ desktop */}
         <div className="hidden sm:flex flex-shrink-0 flex-col items-end gap-2">
           <button
             aria-label="Agregar a favoritos"
             onClick={handleToggleLike}
             className={`p-2 rounded-full transition-all duration-200 ${
-              liked ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-red-500'
+              liked
+                ? 'bg-red-500 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-red-500'
             }`}
           >
             <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
@@ -205,7 +206,6 @@ const handleToggleLike = async (e) => {
           </button>
         </div>
 
-        {/* 🛒 móvil */}
         <button
           aria-label="Agregar al carrito"
           onClick={handleAddToCartClick}

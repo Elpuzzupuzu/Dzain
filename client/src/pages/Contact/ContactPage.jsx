@@ -1,9 +1,3 @@
-// src/pages/ContactPage.jsx (Contenedor principal actualizado)
-
-import React from 'react';
-// La mayoría de los imports de React y estados ya no son necesarios aquí
-import { motion } from 'framer-motion'; // Se mantiene si usas animaciones en el layout
-import { Send, CheckCircle, AlertCircle } from 'lucide-react'; // Puedes quitar estos si solo se usan en ContactForm
 
 // Importar componentes modulares
 import ContactHero from './components/ContactHero';

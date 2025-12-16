@@ -1,34 +1,61 @@
-// src/controllers/ContactController.js
-
 import ContactService from '../services/contactService.js';
+import verifyCaptcha from '../utils/verifyCaptcha.js';
 
 class contactController {
     async handleSubmission(req, res) {
-        const formData = req.body;
+        const { name, email, message, captchaToken } = req.body;
 
-        // 1. Validación (Mínima, puedes añadir Joi o Express Validator aquí)
-        if (!formData.name || !formData.email || !formData.message) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Faltan campos obligatorios (nombre, email, o mensaje).' 
+        // 1️⃣ Validación básica
+        if (!name || !email || !message || !captchaToken) {
+            return res.status(400).json({
+                success: false,
+                message: 'Faltan campos obligatorios o captcha.',
             });
         }
 
         try {
-            // 2. Delegar el trabajo al Service
-            await ContactService.sendContactEmail(formData);
+            // 2️⃣ Verificar reCAPTCHA
+            const captchaResult = await verifyCaptcha(
+                captchaToken,
+                req.ip
+            );
 
-            // 3. Respuesta de éxito
-            return res.status(200).json({ 
-                success: true, 
-                message: 'Mensaje enviado con éxito.' 
+            if (!captchaResult.success) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Captcha inválido.',
+                });
+            }
+
+            // Score recomendado
+            if (captchaResult.score < 0.5) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Actividad sospechosa detectada.',
+                });
+            }
+
+            // Acción (extra seguridad)
+            if (captchaResult.action !== 'contact_form') {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Acción de captcha no válida.',
+                });
+            }
+
+            // 3️⃣ Delegar al service
+            await ContactService.sendContactEmail({ name, email, message });
+
+            return res.status(200).json({
+                success: true,
+                message: 'Mensaje enviado con éxito.',
             });
+
         } catch (error) {
-            // 4. Respuesta de error del servidor
-            console.error('Error en el controlador de contacto:', error.message);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error interno del servidor al procesar el envío.' 
+            console.error('Error en ContactController:', error.message);
+            return res.status(500).json({
+                success: false,
+                message: 'Error interno del servidor.',
             });
         }
     }
