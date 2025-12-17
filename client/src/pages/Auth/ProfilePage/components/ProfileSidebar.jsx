@@ -23,7 +23,7 @@ const SidebarItem = ({ section, active, onClick }) => {
     <button
       onClick={onClick}
       className={`
-        group relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium
+        group relative w-full text-left flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium
         transition-all duration-200
         ${
           active
@@ -40,6 +40,7 @@ const SidebarItem = ({ section, active, onClick }) => {
 
       <span>{section.label}</span>
 
+      {/* Indicador activo */}
       {active && (
         <span className="absolute right-3 w-1.5 h-1.5 rounded-full bg-indigo-400" />
       )}
@@ -57,7 +58,7 @@ const ProfileSidebar = ({ selectedSection, setSelectedSection }) => {
 
   return (
     <>
-      {/* Mobile navigation */}
+      {/* Mobile navigation (Sección de Pestañas Inferiores - Perfecto para la vista móvil) */}
       <div className="lg:hidden sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-slate-200">
         <div className="flex justify-around px-2 py-2">
           {SECTIONS.map((section) => {
@@ -80,8 +81,11 @@ const ProfileSidebar = ({ selectedSection, setSelectedSection }) => {
         </div>
       </div>
 
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-64 flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sticky top-28 h-fit">
+      {/* Desktop sidebar (Sección de Grid - Cambios aplicados aquí) */}
+      {/* ELIMINADO: w-64 (Permitimos que el grid principal maneje el ancho - 1/4)
+        AÑADIDO: w-full (Aseguramos que ocupe todo el espacio de su columna)
+      */}
+      <aside className="hidden lg:flex w-full flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sticky top-28 h-fit">
         <h3 className="px-2 mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
           Mi cuenta
         </h3>

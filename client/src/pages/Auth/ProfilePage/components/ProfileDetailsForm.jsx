@@ -1,4 +1,4 @@
-// src/components/profile/ProfileDetailsForm.jsx
+// src/components/profile/ProfileDetailsForm.jsx (ACTUALIZADO)
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AlertCircle, CheckCircle, Loader2, Camera } from 'lucide-react';
@@ -18,8 +18,7 @@ const ProfileDetailsForm = ({ user, loading, error, successMessage }) => {
         handleDrag,
         handleDrop,
         uploadImage,
-        resetImage,
-    } = useUserProfileImage();
+    } = useUserProfileImage(); // Eliminado resetImage si no se usa
 
     useEffect(() => {
         if (user) {
@@ -46,10 +45,11 @@ const ProfileDetailsForm = ({ user, loading, error, successMessage }) => {
     };
 
     return (
+        // Se mantiene el contenedor principal con el espaciado y estilo.
         <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-7 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 border-b pb-3 mb-4">Editar Detalles</h3>
 
-            {/* Feedback */}
+            {/* Feedback (No se modifican) */}
             {successMessage && (
                 <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
                     <CheckCircle className="w-5 h-5" /> <span>{successMessage}</span>
@@ -61,7 +61,7 @@ const ProfileDetailsForm = ({ user, loading, error, successMessage }) => {
                 </div>
             )}
 
-            {/* Foto de perfil */}
+            {/* Foto de perfil (No se modifica) */}
             <div className="flex flex-col items-center gap-3">
                 <div
                     onDragEnter={handleDrag}
@@ -83,8 +83,12 @@ const ProfileDetailsForm = ({ user, loading, error, successMessage }) => {
                 {uploadError && <p className="text-red-600 text-sm">{uploadError}</p>}
             </div>
 
-            {/* Inputs Nombre y Apellido */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/*
+                CAMBIO CLAVE: Reemplazamos el 'grid grid-cols-1 sm:grid-cols-2 gap-4'
+                por un apilamiento vertical simple, similar al patrón aprobado.
+            */}
+            <div className="space-y-4"> 
+                {/* Input Nombre */}
                 <div>
                     <label htmlFor="nombre" className="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
                     <input
@@ -98,6 +102,7 @@ const ProfileDetailsForm = ({ user, loading, error, successMessage }) => {
                     />
                 </div>
 
+                {/* Input Apellido (Ahora debajo de Nombre) */}
                 <div>
                     <label htmlFor="apellido" className="block text-sm font-semibold text-gray-700 mb-1">Apellido</label>
                     <input
@@ -110,25 +115,25 @@ const ProfileDetailsForm = ({ user, loading, error, successMessage }) => {
                         required
                     />
                 </div>
+
+                {/* Correo (Se mantiene apilado) */}
+                <div>
+                    <label htmlFor="correo" className="block text-sm font-semibold text-gray-700 mb-1">Correo Electrónico</label>
+                    <input
+                        type="email"
+                        id="correo"
+                        name="correo"
+                        value={formData.correo}
+                        disabled
+                        className="w-full border border-gray-300 rounded-lg p-2.5 text-sm bg-gray-50 text-gray-500 cursor-not-allowed shadow-sm"
+                    />
+                    <p className="flex items-center gap-1 text-xs text-gray-500 mt-1">
+                        <AlertCircle className="w-3 h-3" /> El correo no puede cambiarse desde aquí.
+                    </p>
+                </div>
             </div>
 
-            {/* Correo */}
-            <div>
-                <label htmlFor="correo" className="block text-sm font-semibold text-gray-700 mb-1">Correo Electrónico</label>
-                <input
-                    type="email"
-                    id="correo"
-                    name="correo"
-                    value={formData.correo}
-                    disabled
-                    className="w-full border border-gray-300 rounded-lg p-2.5 text-sm bg-gray-50 text-gray-500 cursor-not-allowed shadow-sm"
-                />
-                <p className="flex items-center gap-1 text-xs text-gray-500 mt-1">
-                    <AlertCircle className="w-3 h-3" /> El correo no puede cambiarse desde aquí.
-                </p>
-            </div>
-
-            {/* Botón */}
+            {/* Botón (No se modifica) */}
             <button
                 type="submit"
                 disabled={loading || uploading}

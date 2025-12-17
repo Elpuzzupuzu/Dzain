@@ -42,6 +42,7 @@ const ProfilePage = () => {
     useEffect(() => {
         if (!user?.id) return;
 
+        // Carga de datos específica según la sección
         if (selectedSection === "orders") {
             dispatch(fetchUserPurchaseHistory(user.id));
         }
@@ -52,7 +53,7 @@ const ProfilePage = () => {
     }, [selectedSection, dispatch, user?.id]);
 
 
-    /// FIn de la logica para construir el objeto 
+    // --- Condiciones de Carga y Error ---
 
     if (!authChecked) {
         return (
@@ -85,11 +86,15 @@ const ProfilePage = () => {
 
     const isActionLoading = loading && !error && !successMessage;
 
+    // --- Función de Renderizado de Contenido ---
+
     const renderContent = () => {
+        // Tu lógica de switch case sigue siendo perfecta
         switch (selectedSection) {
             case 'details':
                 return (
                     <div className="space-y-4 sm:space-y-6">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Información General</h1>
                         <ProfilePictureSection user={user} isLoading={!isProfileDataReady} />
                         <ProfileInfoCards user={user} />
                         <div className="pt-4 sm:pt-6 border-t border-gray-200">
@@ -105,22 +110,26 @@ const ProfilePage = () => {
 
             case 'password':
                 return (
-                    <PasswordChangeForm
-                        loading={isActionLoading}
-                        error={error}
-                        successMessage={successMessage}
-                    />
+                    <div className="space-y-6">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Cambiar Contraseña</h1>
+                        <PasswordChangeForm
+                            loading={isActionLoading}
+                            error={error}
+                            successMessage={successMessage}
+                        />
+                    </div>
                 );
 
             case 'orders':
                 return (
                     <div className="space-y-6">
+                         {/* Se puede mover el icono y título a un componente de cabecera */}
                         <div className="flex items-center gap-3 mb-4">
                             <div className="bg-indigo-600 w-12 h-12 rounded-full flex items-center justify-center">
                                 <ShoppingBag className="w-7 h-7 text-white" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-bold text-gray-800">Historial de Compras</h2>
+                                <h2 className="text-3xl font-bold text-gray-900">Historial de Compras</h2>
                                 <p className="text-sm text-gray-500">
                                     Aquí puedes ver todas tus órdenes y los productos que has comprado.
                                 </p>
@@ -138,7 +147,7 @@ const ProfilePage = () => {
             case 'reviews':
                 return (
                     <div className="space-y-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-2">Tus Reseñas</h2>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Tus Reseñas</h1>
                         <UserReviewsList userId={user.id} />
                     </div>
                 );
@@ -146,7 +155,7 @@ const ProfilePage = () => {
             case 'wishlist':
                 return (
                     <div className="space-y-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-2">Lista de Deseos</h2>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Lista de Deseos</h1>
                         <WishlistList wishlist={wishlist?.data || []} loading={loading} />
                     </div>
                 );
@@ -156,16 +165,29 @@ const ProfilePage = () => {
         }
     };
 
+    // --- RENDERIZADO PRINCIPAL (GRID MODERNO) ---
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-4 sm:py-6">
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-                <div className="flex flex-col lg:flex-row gap-3 sm:gap-5">
+        <div className="min-h-screen bg-gray-50 py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                {/* APLICACIÓN DE GRID
+                  grid-cols-1: Móvil (Sidebar y Contenido apilados)
+                  lg:grid-cols-4: Escritorio (4 columnas)
+                  gap-8: Espacio entre columnas
+                */}
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    
+                    {/* BARRA LATERAL (Sidebar - Ocupa 1/4) */}
                     <ProfileSidebar 
                         selectedSection={selectedSection}
                         setSelectedSection={setSelectedSection}
+                        // En desktop, el sidebar se queda en la primera columna (col-span-1)
+                        className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-fit"
                     />
 
-                    <main className="flex-1 bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-gray-100">
+                    {/* CONTENIDO PRINCIPAL (Main Area - Ocupa 3/4) */}
+                    <main className="lg:col-span-3 bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100">
                         {renderContent()}
                     </main>
                 </div>
