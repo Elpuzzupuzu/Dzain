@@ -6,7 +6,8 @@ const Tabs = ({ activeTab, setActiveTab }) => {
     { id: 'work', label: 'Work', count: 54 },
     { id: 'account', label: 'Account', count: null },
     { id: 'orders', label: 'Orders', count: null },
-    { id: 'wishlist', label: 'Wishlist', count: null }
+    { id: 'wishlist', label: 'Wishlist', count: null },
+    { id: 'reviews', label: 'Reviews', count: null } // <--- ¡AÑADIDO!
   ];
 
   return (
@@ -23,11 +24,15 @@ const Tabs = ({ activeTab, setActiveTab }) => {
             }`}
           >
             {tab.label}
+
             {tab.count && (
-              <span className="ml-1 text-xs align-super">{tab.count}</span>
+              <span className="ml-1 text-xs align-super">
+                {tab.count}
+              </span>
             )}
+
             {activeTab === tab.id && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />
             )}
           </button>
         ))}

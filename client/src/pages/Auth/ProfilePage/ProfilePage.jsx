@@ -1,60 +1,88 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AlertCircle, ShoppingBag, Heart } from 'lucide-react';
+// Solo importamos las acciones necesarias que NO gestiona UserReviewsList
 import { 
-    clearSuccessMessage, 
     fetchUserPurchaseHistory, 
-    fetchUserWishlist 
-} from '../../../features/user/usersSlice';
+    fetchUserWishlist,
+    // fetchUserReviews ya no es necesario aquí si UserReviewsList es autónomo
+} from '../../../features/user/usersSlice'; 
 
-import ProfilePictureSection from './components/ProfilePictureSection';
-import ProfileDetailsForm from './components/ProfileDetailsForm';
-import PasswordChangeForm from './components/PasswordChangeForm';
-import ProfileInfoCards from './components/ProfileInfoCards';
-import ProfileSidebar from '../../Auth/ProfilePage/components/ProfileSidebar';
-import PurchaseHistoryList from './components/PurchaseHistoryList';
-import UserReviewsList from './components/UserReviewsList'; 
-import WishlistList from './components/WishlistList'; // 🔹 Nuevo componente
+// Importación de componentes (UserReviewsList ya debe estar en index.js)
+import { 
+    ProfileHeader, 
+    Tabs, 
+    ProjectCard, 
+    AccountInfo, 
+    ChangePassword, 
+    Orders, 
+    Wishlist,
+    UserReviewsList // <-- Componente Autónomo de Reviews
+} from '../ProfileSection/components/index'; 
 
-const ProfilePage = () => {
+// Main ProfilePage
+export default function ProfilePage() {
     const dispatch = useDispatch();
+    const [activeTab, setActiveTab] = useState('account');
+    
+    // ----------------------------------------------------
+    // LÓGICA DE EXTRACCIÓN DEL USUARIO Y DATOS REALES DE REDUX
+    // ----------------------------------------------------
     const { 
-        user, 
+        user: reduxUser, 
+        authChecked,
         loading, 
-        error, 
-        successMessage, 
-        authChecked, 
-        purchaseHistory,
-        wishlist
+        purchaseHistory, 
+        wishlist: reduxWishlist,
+        // reviews: userReviews, <-- Ya no es necesario extraer las reviews aquí
     } = useSelector((state) => state.user);
+    
+    // Preparamos los arrays de datos
+    const realOrders = purchaseHistory || []; 
+    const realWishlist = reduxWishlist?.data || [];
+    // const realReviews = userReviews || []; // <-- Ya no es necesario
+    
+    const user = reduxUser || {
+        name: 'Usuario Invitado',
+        role: 'Visitante',
+        location: '',
+        email: '',
+        phone: '',
+        id: null,
+    };
+    
+    const handleRemoveFromWishlist = (itemId) => {
+        if (reduxUser?.id) {
+            console.log(`[PENDIENTE] Eliminando item ${itemId}...`);
+            // dispatch(removeWishlistItem({ userId: reduxUser.id, itemId }));
+        }
+    };
 
-    const [selectedSection, setSelectedSection] = useState('details');
-
+    // ----------------------------------------------------
+    // EFECTO PARA CARGAR DATOS ASÍNCRONOS POR PESTAÑA
+    // ----------------------------------------------------
     useEffect(() => {
-        if (successMessage || error) {
-            const timer = setTimeout(() => {
-                dispatch(clearSuccessMessage());
-            }, 5000);
-            return () => clearTimeout(timer);
-        }
-    }, [successMessage, error, dispatch]);
+        if (!reduxUser?.id) return;
 
-    useEffect(() => {
-        if (!user?.id) return;
-
-        // Carga de datos específica según la sección
-        if (selectedSection === "orders") {
-            dispatch(fetchUserPurchaseHistory(user.id));
+        // Carga de Historial de Compras
+        if (activeTab === "orders") {
+            dispatch(fetchUserPurchaseHistory(reduxUser.id));
         }
 
-        if (selectedSection === "wishlist") {
-            dispatch(fetchUserWishlist(user.id));
+        // Carga de Lista de Deseos
+        if (activeTab === "wishlist") {
+            dispatch(fetchUserWishlist(reduxUser.id));
         }
-    }, [selectedSection, dispatch, user?.id]);
+        
+        // Carga de Reseñas: 
+        // Ya NO es necesaria aquí, UserReviewsList se encarga internamente
+        // if (activeTab === "reviews") {
+        //     dispatch(fetchUserReviews(reduxUser.id)); 
+        // }
+        
+    }, [activeTab, dispatch, reduxUser?.id]);
 
 
-    // --- Condiciones de Carga y Error ---
-
+    // --- Manejo de la Carga de Autenticación y Sesión (sin cambios) ---
     if (!authChecked) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -63,137 +91,80 @@ const ProfilePage = () => {
         );
     }
 
-    if (!user) {
-        return (
-            <div className="min-h-screen bg-gray-50 py-10 px-4 flex items-center justify-center">
-                <div className="text-center p-8 bg-white rounded-xl shadow-lg max-w-sm w-full">
-                    <AlertCircle className="w-12 h-12 mx-auto text-red-500 mb-4" />
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">Acceso denegado</h1>
-                    <p className="text-base text-gray-600">Por favor, inicia sesión para ver tu perfil.</p>
-                </div>
-            </div>
-        );
-    }
-
-    const isProfileDataReady = !!user.nombre;
-    if (!isProfileDataReady) {
+    if (!reduxUser) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <p className="text-gray-500 text-lg">Cargando datos del perfil...</p>
+                <p className="text-red-500 text-lg">Por favor, inicia sesión para ver tu perfil.</p>
             </div>
         );
     }
 
-    const isActionLoading = loading && !error && !successMessage;
+    // --- Datos de Mock restantes (sin cambios) ---
+    const projects = [
+        { id: 1, title: 'VPN Mobile App', category: 'Mobile UI, Research', likes: '517', views: '9.3k', bgColor: 'bg-gradient-to-br from-blue-200 to-blue-300', images: ['https://images.unsplash.com/photo-1551650975-87deedd944c3?w=200&h=400&fit=crop'] },
+        { id: 2, title: 'Property Dashboard', category: 'Web interface', likes: '983', views: '14k', bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200', images: ['https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=250&fit-crop'], badges: [{ text: 'UI', color: 'bg-orange-500' }] },
+        { id: 3, title: 'Healthcare Mobile App', category: 'Mobile UI, Branding', likes: '875', views: '13.5k', bgColor: 'bg-gradient-to-br from-blue-100 to-indigo-200', images: ['https://images.unsplash.com/photo-1551650975-87deedd944c3?w=200&h=400&fit-crop'], badges: [{ text: 'UI', color: 'bg-orange-500' }, { text: 'Br', color: 'bg-blue-500' }] }
+    ];
 
-    // --- Función de Renderizado de Contenido ---
 
-    const renderContent = () => {
-        // Tu lógica de switch case sigue siendo perfecta
-        switch (selectedSection) {
-            case 'details':
-                return (
-                    <div className="space-y-4 sm:space-y-6">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Información General</h1>
-                        <ProfilePictureSection user={user} isLoading={!isProfileDataReady} />
-                        <ProfileInfoCards user={user} />
-                        <div className="pt-4 sm:pt-6 border-t border-gray-200">
-                            <ProfileDetailsForm 
-                                user={user}
-                                loading={isActionLoading}
-                                error={error}
-                                successMessage={successMessage}
+    // Renderizado principal
+    return (
+        <div className="min-h-screen bg-gray-50">
+            <div className="max-w-7xl mx-auto">
+                
+                {/* Profile Header */}
+                <ProfileHeader user={user} />
+                
+                {/* Tabs */}
+                <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+                
+                {/* Content */}
+                <div className="p-8">
+                    
+                    {activeTab === 'work' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {projects.map((project) => (
+                                <ProjectCard key={project.id} project={project} />
+                            ))}
+                        </div>
+                    )}
+                    
+                    {activeTab === 'account' && (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl">
+                            <AccountInfo user={user} />
+                            <ChangePassword />
+                        </div>
+                    )}
+                    
+                    {activeTab === 'orders' && (
+                        <div className="max-w-3xl">
+                            <Orders orders={realOrders} loading={loading} />
+                        </div>
+                    )}
+                    
+                    {activeTab === 'wishlist' && (
+                        <div className="max-w-4xl">
+                            <Wishlist 
+                                items={realWishlist} 
+                                loading={loading} 
+                                onRemove={handleRemoveFromWishlist} 
                             />
                         </div>
-                    </div>
-                );
-
-            case 'password':
-                return (
-                    <div className="space-y-6">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Cambiar Contraseña</h1>
-                        <PasswordChangeForm
-                            loading={isActionLoading}
-                            error={error}
-                            successMessage={successMessage}
-                        />
-                    </div>
-                );
-
-            case 'orders':
-                return (
-                    <div className="space-y-6">
-                         {/* Se puede mover el icono y título a un componente de cabecera */}
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="bg-indigo-600 w-12 h-12 rounded-full flex items-center justify-center">
-                                <ShoppingBag className="w-7 h-7 text-white" />
-                            </div>
-                            <div>
-                                <h2 className="text-3xl font-bold text-gray-900">Historial de Compras</h2>
-                                <p className="text-sm text-gray-500">
-                                    Aquí puedes ver todas tus órdenes y los productos que has comprado.
-                                </p>
-                            </div>
-                        </div>
-
-                        <PurchaseHistoryList 
-                            userId={user.id}
-                            history={purchaseHistory}
-                            loading={loading}
-                        />
-                    </div>
-                );
-
-            case 'reviews':
-                return (
-                    <div className="space-y-6">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Tus Reseñas</h1>
-                        <UserReviewsList userId={user.id} />
-                    </div>
-                );
-
-            case 'wishlist':
-                return (
-                    <div className="space-y-6">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-4">Lista de Deseos</h1>
-                        <WishlistList wishlist={wishlist?.data || []} loading={loading} />
-                    </div>
-                );
-
-            default:
-                return null;
-        }
-    };
-
-    // --- RENDERIZADO PRINCIPAL (GRID MODERNO) ---
-
-    return (
-        <div className="min-h-screen bg-gray-50 py-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                {/* APLICACIÓN DE GRID
-                  grid-cols-1: Móvil (Sidebar y Contenido apilados)
-                  lg:grid-cols-4: Escritorio (4 columnas)
-                  gap-8: Espacio entre columnas
-                */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    )}
                     
-                    {/* BARRA LATERAL (Sidebar - Ocupa 1/4) */}
-                    <ProfileSidebar 
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                        // En desktop, el sidebar se queda en la primera columna (col-span-1)
-                        className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-fit"
-                    />
-
-                    {/* CONTENIDO PRINCIPAL (Main Area - Ocupa 3/4) */}
-                    <main className="lg:col-span-3 bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100">
-                        {renderContent()}
-                    </main>
+                    {/* --------------------------------------------------- */}
+                    {/* INTEGRACIÓN DEL COMPONENTE DE REVIEWS AUTÓNOMO */}
+                    {/* --------------------------------------------------- */}
+                    {activeTab === 'reviews' && (
+                        <div className="max-w-3xl">
+                            <UserReviewsList 
+                                userId={user.id} 
+                                
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
     );
-};
-
-export default ProfilePage;
+}

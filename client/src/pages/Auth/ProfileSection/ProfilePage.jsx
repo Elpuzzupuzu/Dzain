@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux'; 
+// Asumiendo que esta es la ruta de tu slice de usuario
+import { 
+    // Usamos esto para que el componente funcione
+} from '../../../features/user/usersSlice'; 
+
 import { 
   ProfileHeader, 
   Tabs, 
@@ -7,21 +13,48 @@ import {
   ChangePassword, 
   Orders, 
   Wishlist 
-} from './components/index'; // Importa desde el archivo index.js
+} from '../ProfileSection/components/index'; 
 
 // Main ProfilePage
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('work');
   
-  // Datos y lógica de la página
-  const user = {
-    name: 'Irene Brooks',
-    role: 'Interface and Brand Designer',
-    location: 'based in San Antonio',
-    email: 'irene.brooks@email.com',
-    phone: '+1 (555) 123-4567'
+  // ----------------------------------------------------
+  // LÓGICA REUTILIZADA PARA EXTRAER EL USUARIO DE REDUX
+  // ----------------------------------------------------
+  // Extraemos el usuario y el estado de autenticación (authChecked)
+  const { user: reduxUser, authChecked } = useSelector((state) => state.user);
+  
+  // Objeto 'user' que será utilizado en el resto del componente
+  const user = reduxUser || {
+      name: 'Usuario Invitado',
+      role: 'Visitante',
+      location: '',
+      email: '',
+      phone: ''
   };
+  
+  // --- Manejo de la Carga de Autenticación (Auth Checked) ---
+  if (!authChecked) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <p className="text-gray-500 text-lg">Verificando sesión...</p>
+        </div>
+    );
+  }
 
+  // --- Manejo de la Sesión No Iniciada (No User) ---
+  if (!reduxUser) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <p className="text-red-500 text-lg">Por favor, inicia sesión para ver tu perfil.</p>
+        </div>
+    );
+  }
+
+  // ----------------------------------------------------
+  // Datos de Mock (mantener para que el ejemplo sea funcional)
+  // ----------------------------------------------------
   const projects = [
     {
       id: 1,
@@ -83,6 +116,7 @@ export default function ProfilePage() {
   const handleRemoveFromWishlist = (id) => {
     setWishlist(wishlist.filter(item => item.id !== id));
   };
+
 
   // Renderizado principal
   return (

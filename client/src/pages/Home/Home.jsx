@@ -15,10 +15,13 @@ function Home() {
       <main>
         {/* <ProductSlider /> */}
         <HeroSlider/>
+        
+         <AboutUs />
         {/* <HeroSection heroImage={heroImage} /> */}
         <ProductSliderPrototype />
         <CategoryGrid />
-        <AboutUs />
+        {/* <AboutUs /> */}
+          <ProductSliderPrototype />
         {/* <LinkSection /> */}
       </main>
     </>

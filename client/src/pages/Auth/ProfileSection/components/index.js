@@ -5,6 +5,7 @@ import AccountInfo from './AccountInfo';
 import ChangePassword from './ChangePassword';
 import Orders from './Orders';
 import Wishlist from './Wishlist';
+import UserReviewsList from '../../ProfilePage/components/UserReviewsList'
 
 export {
   ProfileHeader,
@@ -13,5 +14,6 @@ export {
   AccountInfo,
   ChangePassword,
   Orders,
-  Wishlist
+  Wishlist,
+  UserReviewsList
 };
