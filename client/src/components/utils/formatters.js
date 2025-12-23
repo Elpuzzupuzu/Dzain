@@ -11,10 +11,11 @@ export const formatDate = (isoDate) => {
     });
 };
 
-// Formato de moneda: '$1.234,56'
 export const formatCurrency = (amount) => {
-    // Se usa 'es-ES' y 'USD' para el formato de moneda.
-    return new Intl.NumberFormat('es-ES', { 
-        style: 'currency', currency: 'USD'
+    const value = new Intl.NumberFormat('es-MX', { 
+        style: 'currency',
+        currency: 'MXN'
     }).format(amount || 0);
+
+    return `${value} MXN`;
 };
