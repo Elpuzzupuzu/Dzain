@@ -36,6 +36,57 @@ async function createQuotation(req, res) {
         res.status(500).json({ message: "Error interno al procesar la cotización." });
     }
 }
+////////////////////////////////////
+async function createDirectQuotation(req, res) {
+    // 1. Obtener los datos necesarios del cuerpo de la solicitud
+    const { itemsVenta, datosCliente } = req.body;
+    
+    // Validación básica de los datos de entrada
+    if (!itemsVenta || !Array.isArray(itemsVenta) || itemsVenta.length === 0 || !datosCliente || !datosCliente.nombre) {
+        return res.status(400).json({ 
+            message: "Datos incompletos. Se requieren 'itemsVenta' (array no vacío) y 'datosCliente' (con nombre)." 
+        });
+    }
+
+    try {
+        // 2. Llamar al nuevo servicio de venta directa
+        const cotizacion = await QuotationService.generateDirectQuotation(
+            itemsVenta,
+            datosCliente
+        );
+        
+        // 3. Emisión del evento Socket.IO
+        // Aunque no hay un usuario específico logueado para filtrar,
+        // este evento es útil para que los administradores o paneles de control
+        // que estén escuchando puedan ver la nueva cotización inmediatamente.
+        req.io.emit('nueva_cotizacion', { 
+            cotizacion,
+            // Utilizamos el ID Pivote para indicar el tipo de cotización
+            usuarioId: cotizacion.usuario_id 
+        });
+        console.log(`📡 Socket.IO: Evento 'nueva_cotizacion' emitido para cotización directa.`);
+        // ---------------------------------------------
+        
+        // 4. Respuesta exitosa
+        res.status(201).json({ 
+            message: "Cotización de Venta Directa generada con éxito.", 
+            cotizacion 
+        });
+
+    } catch (error) {
+        console.error("Error en createDirectQuotation:", error.message);
+        
+        // Manejo de errores específicos del servicio (ej. ítems inválidos, error de DB)
+        if (error.message.includes("vacía") || error.message.includes("Fallo en el proceso")) {
+            return res.status(400).json({ message: error.message });
+        }
+
+        res.status(500).json({ message: "Error interno al procesar la cotización directa." });
+    }
+}
+
+
+
 
 // ==========================================================
 // 2. READ (Detalle por ID)
@@ -220,9 +271,10 @@ async function updateQuotationItems(req, res) {
 
 export {
     createQuotation,
+    createDirectQuotation,
     getQuotationDetails,
     getQuotationsByUser,
     updateQuotationStatus,
-    updateQuotationItems, // 👈 nuevo
+    updateQuotationItems, // 
     deleteQuotation
 };

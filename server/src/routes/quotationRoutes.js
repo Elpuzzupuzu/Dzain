@@ -4,7 +4,8 @@ import { Router } from 'express';
 // Asegúrate que la ruta a tu authMiddleware sea correcta.
 import { authMiddleware as protect, authRole } from '../middleware/authMiddleware.js'; 
 import { 
-    createQuotation, 
+    createQuotation,
+    createDirectQuotation, 
     getQuotationDetails,
     getQuotationsByUser,
     updateQuotationStatus, 
@@ -22,6 +23,13 @@ const ONLY_ADMIN = ['admin']; // Definición del rol de administrador
 //  RUTA 1: CREAR (Generate)
 router.post('/', protect, createQuotation); 
 // Ejemplo: POST /api/quotations
+
+router.post(
+    '/directa', 
+    protect, 
+    authRole(ONLY_ADMIN), // <--- Protección agregada
+    createDirectQuotation
+);
 
 //  RUTA 2: LEER (Listar por Usuario/Admin)
 router.get('/', protect, getQuotationsByUser); 

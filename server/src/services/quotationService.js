@@ -1,7 +1,8 @@
 ///quotationService.js
 import * as QuotationRepo from '../repositories/quotationRepository.js';
 import { CarritoRepository } from '../repositories/cartRepository.js'; 
-
+const USUARIO_PIVOTE_ID = 'f1931a2a-c6f8-4378-95d6-260ebe83f11a'; 
+const CARRITO_PIVOTE_ID = '7fc91521-73bc-4f8e-9d14-d56d8cafb67e';
 // ==========================================================
 // MÉTODOS DE LÓGICA DE NEGOCIO
 // ==========================================================
@@ -9,7 +10,64 @@ import { CarritoRepository } from '../repositories/cartRepository.js';
 // ==========================================================
 // MÉTODOS CRUD (Delegación + RBAC)
 // ==========================================================
+async function generateDirectQuotation(itemsVenta, datosCliente) {
+    try {
+        if (!itemsVenta || itemsVenta.length === 0) {
+            throw new Error("La lista de ítems de la venta está vacía. No se puede generar la cotización.");
+        }
 
+        let totalCotizado = 0;
+        const itemsCotizacion = [];
+        
+        // --- 1. CÁLCULO DEL TOTAL ---
+        for (const item of itemsVenta) {
+            if (item.precio === undefined || item.cantidad === undefined) {
+                throw new Error(`Ítem incompleto en la lista de venta: ${JSON.stringify(item)}`);
+            }
+            
+            totalCotizado += item.precio * item.cantidad;
+
+            itemsCotizacion.push({
+                producto_id: item.producto_id,
+                nombre_producto: item.nombre, 
+                precio_unitario_aplicado: item.precio,
+                cantidad: item.cantidad,
+            });
+        }
+        
+        // --- 2. CREAR ENCABEZADO Y DATOS DE CLIENTE DIRECTO ---
+        
+        // Llamamos al repositorio que hará el doble INSERT (cotizaciones + cotizaciones_directas).
+        // Le pasamos los IDs Pivote y los datos del cliente anónimo.
+        const { id: nuevaCotizacionId } = await QuotationRepo.createDirectQuotation(
+            USUARIO_PIVOTE_ID,      // Se inyecta el ID Pivote
+            totalCotizado, 
+            CARRITO_PIVOTE_ID,      // Se inyecta el ID Carrito Pivote
+            datosCliente
+        );
+        
+        // --- 3. PREPARAR E INSERTAR ÍTEMS DE COTIZACIÓN ---
+        const itemsConCotizacionId = itemsCotizacion.map(item => ({
+            ...item,
+            cotizacion_id: nuevaCotizacionId 
+        }));
+        
+        await QuotationRepo.addQuotationItems(itemsConCotizacionId);
+        
+        // --- 4. NO HAY LIMPIEZA DE CARRITO ---
+        // Dado que se usó el Carrito Pivote (maestro), no se desactiva ni se limpian sus ítems.
+        
+        return QuotationRepo.getQuotationById(nuevaCotizacionId); 
+
+    } catch (error) {
+        console.error("Error en generateDirectQuotation Service:", error);
+        throw new Error(`Fallo en el proceso de cotización directa: ${error.message}`);
+    }
+}
+
+
+
+////////////////////////////
 async function generateQuotation(usuarioId) {
     try {
         const carritoId = await CarritoRepository.getOrCreateActiveCartId(usuarioId);
@@ -231,6 +289,7 @@ async function updateQuotationItems(cotizacionId, itemsNuevos) {
 
 export {
     generateQuotation,
+    generateDirectQuotation,
     getQuotations,
     getQuotationDetails,
     updateQuotationStatus,

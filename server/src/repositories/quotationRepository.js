@@ -6,6 +6,65 @@ const TABLA_COTIZACION_ITEMS = 'cotizaciones_items';
 const ESTADOS_VALIDOS = ['GENERADA', 'ACEPTADA', 'RECHAZADA', 'COMPLETADA', 'CANCELADA'];
 const TABLA_PRODUCTOS = 'productos';
 const TABLA_USUARIOS = 'usuarios'
+const TABLA_COTIZACIONES_DIRECTAS = 'cotizaciones_directas'
+const USUARIO_PIVOTE_ID = 'f1931a2a-c6f8-4378-95d6-260ebe83f11a'; 
+//TEST////
+
+
+/**
+ * Crea una cotización para un cliente anónimo (venta directa).
+ * Utiliza los IDs pivote y registra los datos del cliente en una tabla separada.
+ * * @param {number} totalCotizado - El monto total de la cotización.
+ * @param {object} datosClienteDirecto - Objeto con {nombre, apellido, email, telefono, ...}
+ * @returns {object} El objeto con el ID de la cotización creada.
+ */
+async function createDirectQuotation(usuarioId, totalCotizado, carritoIdOrigen, datosClienteDirecto) {
+    
+    // --- 1. Inserción de la Cabecera (Reutilizando el método existente) ---
+    // AHORA USA los parámetros recibidos: usuarioId y carritoIdOrigen
+    const cotizacionData = await createQuotation(
+        usuarioId,      // <--- Usa el parámetro
+        totalCotizado,
+        carritoIdOrigen // <--- Usa el parámetro
+    );
+    
+    const cotizacionId = cotizacionData.id;
+
+    // --- 2. Inserción en 'cotizaciones_directas' ---
+    if (!datosClienteDirecto || !datosClienteDirecto.nombre) {
+        throw new Error("Se requieren datos del cliente (nombre) para la cotización directa.");
+    }
+
+    const datosDirectos = {
+        cotizacion_id: cotizacionId,
+        nombre: datosClienteDirecto.nombre,
+        apellido: datosClienteDirecto.apellido,
+        email: datosClienteDirecto.email,
+        telefono: datosClienteDirecto.telefono,
+        // Incluir cualquier otro campo de la tabla cotizaciones_directas
+    };
+
+    const { error: directasError } = await supabase
+        .from(TABLA_COTIZACIONES_DIRECTAS)
+        .insert(datosDirectos);
+
+    if (directasError) {
+        console.error('Error en createDirectQuotation (datos directos):', directasError);
+        
+        // RECOMENDACIÓN CLAVE: Lógica de Compensación (Rollback manual)
+        // Ya que la primera inserción (createQuotation) fue exitosa, si la segunda falla,
+        // necesitamos limpiar la cabecera para evitar datos huérfanos.
+        
+        // IMPORTANTE: Asegúrese de que esta lógica de borrado esté disponible en su repositorio.
+        // await supabase.from(TABLA_COTIZACIONES).delete().eq('id', cotizacionId);
+        
+        throw new Error(`Error al insertar datos de cliente anónimo: ${directasError.message}`);
+    }
+
+    return cotizacionData;
+}
+
+////////
 /**
  * Crea la cabecera de la cotización.
  */
@@ -106,8 +165,102 @@ async function addQuotationItems(items) {
 ///testing
 /// BUSCAR UNA COTIZACION POR ID ESPECIFICA 
 
+// async function getQuotationById(id) {
+//     // 1. OBTENER LA COTIZACIÓN Y LOS ÍTEMS
+//     const { data: quotation, error: quotationError } = await supabase
+//         .from(TABLA_COTIZACIONES)
+//         .select(`
+//             *,
+//             ${TABLA_COTIZACION_ITEMS} (*)
+//         `)
+//         .eq('id', id)
+//         .single();
+
+//     if (quotationError && quotationError.code !== 'PGRST116') {
+//         console.error('Error al leer la cotización:', quotationError);
+//         throw new Error(`Error al leer la cotización: ${quotationError.message}`);
+//     }
+    
+//     if (!quotation) {
+//         return null; // Cotización no encontrada
+//     }
+
+//     // 2. EXTRAER ID DEL USUARIO Y OBTENER SUS DATOS (NOMBRE Y CORREO)
+//     const userId = quotation.usuario_id;
+
+//     if (userId) {
+//         const { data: userData, error: userError } = await supabase
+//             .from(TABLA_USUARIOS)
+//             .select('nombre, correo')
+//             .eq('id', userId)
+//             .single();
+
+//         if (userError) {
+//             console.error('Error al leer datos del usuario:', userError);
+//             // Si hay un error, aún podemos continuar con la cotización
+//         }
+        
+//         // FUSIONAR DATOS DEL USUARIO
+//         if (userData) {
+//             // Se anida la información del usuario en la clave 'usuario'
+//             quotation.usuario = {
+//                 nombre: userData.nombre || 'N/A',
+//                 correo: userData.correo || 'N/A',
+//             };
+//         } else {
+//             // Si no se encuentra, se añade un objeto vacío para evitar errores en el frontend
+//              quotation.usuario = { nombre: 'Desconocido', correo: 'N/A' };
+//         }
+//     } else {
+//         // Caso en que ni siquiera hay un usuario_id
+//         quotation.usuario = { nombre: 'N/A', correo: 'N/A' };
+//     }
+    
+//     // 3. PROCESAR ÍTEMS DE PRODUCTOS
+//     const items = quotation[TABLA_COTIZACION_ITEMS];
+
+//     // Extraer IDs de productos
+//     const productIds = items
+//         .map(item => item.producto_id)
+//         .filter((value, index, self) => self.indexOf(value) === index); // Obtener IDs únicos
+
+//     if (productIds.length === 0) {
+//         // Retorna la cotización con los datos de usuario recién fusionados
+//         return quotation;
+//     }
+
+//     // 4. OBTENER LAS IMÁGENES DE LOS PRODUCTOS
+//     const { data: products, error: productError } = await supabase
+//         .from(TABLA_PRODUCTOS)
+//         .select('id, imagen') // Solo necesitamos el ID y la imagen
+//         .in('id', productIds);
+
+//     if (productError) {
+//         console.error('Error al leer productos:', productError);
+//     }
+
+//     // Crear un mapa para acceso rápido {id: imagen}
+//     const productMap = (products || []).reduce((map, product) => {
+//         map[product.id] = product.imagen;
+//         return map;
+//     }, {});
+
+//     // 5. FUSIONAR DATOS DE PRODUCTOS
+//     const mergedItems = items.map(item => ({
+//         ...item,
+//         // Añadir la imagen al ítem de la cotización
+//         imagen_producto: productMap[item.producto_id] || null 
+//     }));
+
+//     // Reemplazar los ítems antiguos con los ítems fusionados
+//     quotation[TABLA_COTIZACION_ITEMS] = mergedItems;
+    
+//     return quotation;
+// }
+// Constantes necesarias (Definir o Importar)
 async function getQuotationById(id) {
     // 1. OBTENER LA COTIZACIÓN Y LOS ÍTEMS
+    // ... (El código de la Sección 1 permanece igual) ...
     const { data: quotation, error: quotationError } = await supabase
         .from(TABLA_COTIZACIONES)
         .select(`
@@ -128,77 +281,76 @@ async function getQuotationById(id) {
 
     // 2. EXTRAER ID DEL USUARIO Y OBTENER SUS DATOS (NOMBRE Y CORREO)
     const userId = quotation.usuario_id;
+    const isAnonymous = userId === USUARIO_PIVOTE_ID;
+    
+    // LOG 1: Verificar el tipo de cotización y los IDs
+    console.log(`[LOG] Procesando cotización ID: ${quotation.id}`);
+    console.log(`[LOG] Usuario ID: ${userId}, Es Anónimo: ${isAnonymous}`);
+
+    let userData = null;
+    let userError = null;
 
     if (userId) {
-        const { data: userData, error: userError } = await supabase
-            .from(TABLA_USUARIOS)
-            .select('nombre, correo')
-            .eq('id', userId)
-            .single();
+        if (isAnonymous) {
+            // 2A. CASO ANÓNIMO: Buscar en la tabla de datos directos
+            console.log(`[LOG] Buscando datos en ${TABLA_COTIZACIONES_DIRECTAS} para cotizacion_id: ${quotation.id}`);
+            
+            ({ data: userData, error: userError } = await supabase
+                .from(TABLA_COTIZACIONES_DIRECTAS)
+                .select('nombre, apellido, email')
+                .eq('cotizacion_id', quotation.id) 
+                .single());
+            
+            // LOG 2: Resultado de la consulta directa
+            console.log(`[LOG] Resultado de cotizaciones_directas -> userData:`, userData);
+            console.log(`[LOG] Resultado de cotizaciones_directas -> userError:`, userError);
+
+            // Si hay datos, los renombramos para ajustarnos al formato 'usuario'
+            if (userData) {
+                userData.nombre = `${userData.nombre} ${userData.apellido || ''}`;
+                userData.correo = userData.email;
+            }
+
+        } else {
+            // 2B. CASO REGISTRADO: Buscar en la tabla de usuarios
+            // ... (Este bloque permanece igual)
+            ({ data: userData, error: userError } = await supabase
+                .from(TABLA_USUARIOS)
+                .select('nombre, correo')
+                .eq('id', userId)
+                .single());
+        }
 
         if (userError) {
-            console.error('Error al leer datos del usuario:', userError);
-            // Si hay un error, aún podemos continuar con la cotización
+            console.error('Error al leer datos del cliente/usuario:', userError);
+            // El flujo continúa con userData=null si hay un error
         }
         
-        // FUSIONAR DATOS DEL USUARIO
+        // FUSIONAR DATOS DEL USUARIO/CLIENTE
+        // LOG 3: Verificación antes de la fusión
+        console.log(`[LOG] userData antes de fusión final (debe tener nombre/correo):`, userData);
+        
         if (userData) {
-            // Se anida la información del usuario en la clave 'usuario'
+            // Se anida la información en la clave 'usuario'
             quotation.usuario = {
+                id: isAnonymous ? null : userId, // Solo el usuario registrado tiene ID
                 nombre: userData.nombre || 'N/A',
                 correo: userData.correo || 'N/A',
             };
         } else {
-            // Si no se encuentra, se añade un objeto vacío para evitar errores en el frontend
-             quotation.usuario = { nombre: 'Desconocido', correo: 'N/A' };
+            // Si no se encuentra (ni usuario registrado, ni datos directos)
+            // Esta rama se ejecuta si userData es null
+            quotation.usuario = { nombre: isAnonymous ? 'Cliente Anónimo' : 'Desconocido', correo: 'N/A' };
         }
     } else {
-        // Caso en que ni siquiera hay un usuario_id
+        // Caso en que ni siquiera hay un usuario_id 
         quotation.usuario = { nombre: 'N/A', correo: 'N/A' };
     }
     
-    // 3. PROCESAR ÍTEMS DE PRODUCTOS
-    const items = quotation[TABLA_COTIZACION_ITEMS];
-
-    // Extraer IDs de productos
-    const productIds = items
-        .map(item => item.producto_id)
-        .filter((value, index, self) => self.indexOf(value) === index); // Obtener IDs únicos
-
-    if (productIds.length === 0) {
-        // Retorna la cotización con los datos de usuario recién fusionados
-        return quotation;
-    }
-
-    // 4. OBTENER LAS IMÁGENES DE LOS PRODUCTOS
-    const { data: products, error: productError } = await supabase
-        .from(TABLA_PRODUCTOS)
-        .select('id, imagen') // Solo necesitamos el ID y la imagen
-        .in('id', productIds);
-
-    if (productError) {
-        console.error('Error al leer productos:', productError);
-    }
-
-    // Crear un mapa para acceso rápido {id: imagen}
-    const productMap = (products || []).reduce((map, product) => {
-        map[product.id] = product.imagen;
-        return map;
-    }, {});
-
-    // 5. FUSIONAR DATOS DE PRODUCTOS
-    const mergedItems = items.map(item => ({
-        ...item,
-        // Añadir la imagen al ítem de la cotización
-        imagen_producto: productMap[item.producto_id] || null 
-    }));
-
-    // Reemplazar los ítems antiguos con los ítems fusionados
-    quotation[TABLA_COTIZACION_ITEMS] = mergedItems;
+    // ... (El resto de la función - Pasos 3, 4, 5 - permanece igual) ...
     
     return quotation;
 }
-
 ///// METODO PARA RETORNAR SOLO LAS DEL USAURIO 
 
 async function getQuotationsByUserId(usuarioId, params) {
@@ -529,6 +681,7 @@ async function recalculateQuotationTotal(cotizacionId) {
 
 export {
     createQuotation,
+    createDirectQuotation,
     addQuotationItems,
     getQuotationById,
     getQuotationsByUserId,
