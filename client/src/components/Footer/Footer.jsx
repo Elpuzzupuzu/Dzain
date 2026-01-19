@@ -1,133 +1,88 @@
 import React from 'react';
-import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Mail, MapPin, Phone, ArrowRight } from 'lucide-react';
 
 const Footer = () => {
-  const socialLinks = [
-    // EL ENLACE DE FACEBOOK HA SIDO ACTUALIZADO AQUÍ:
-    { name: 'Facebook', icon: Facebook, url: 'https://www.facebook.com/share/1B48PDtHZD/' },
-    { name: 'Instagram', icon: Instagram, url: '#' }, // Mantener '#' o añadir el enlace real
-    { name: 'LinkedIn', icon: Linkedin, url: '#' },   // Mantener '#' o añadir el enlace real
-  ];
-
   return (
-    <footer className="bg-[#1C2E82] text-white relative overflow-hidden">
-      {/* Elementos decorativos de fondo */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-24 h-24 bg-red-500 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-6">
-        {/* Contenido principal */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-6">
-
-          {/* Logo/Branding Section */}
-          <div className="lg:col-span-1">
-            <div className="mb-4">
-              <h2 className="text-3xl font-black text-white mb-2 tracking-tight">FLUCSA</h2>
-              <p className="text-slate-300 text-sm leading-relaxed">
-                Innovación y excelencia en cada proyecto. Construyendo el futuro juntos.
-              </p>
+    <footer className="bg-slate-900 text-gray-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          
+          {/* Columna 1: Branding y Descripción */}
+          <div className="space-y-6">
+            <div className="flex items-center space-x-2">
+              <div className="bg-teal-600 text-white px-3 py-1 font-bold text-xl">D</div>
+              <span className="font-bold text-xl text-white tracking-wider">ZAIN</span>
+            </div>
+            <p className="text-sm leading-relaxed">
+              Elevando el estándar del diseño de interiores con mobiliario de alta gama que combina confort, 
+              estética y funcionalidad para transformar tu hogar.
+            </p>
+            <div className="flex space-x-4">
+              <a href="#" className="hover:text-teal-400 transition-colors"><Facebook size={20} /></a>
+              <a href="#" className="hover:text-teal-400 transition-colors"><Twitter size={20} /></a>
+              <a href="#" className="hover:text-teal-400 transition-colors"><Instagram size={20} /></a>
             </div>
           </div>
 
-          {/* Sección de Contacto */}
+          {/* Columna 2: Enlaces Rápidos */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-white relative">
-              Contáctanos
-              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-red-500"></div>
-            </h3>
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3 group">
-                <MapPin
-                  size={18}
-                  className="text-red-500 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform"
-                />
-                <p className="text-slate-300 text-sm group-hover:text-white transition-colors">
-                  Calle 26a entre 47 y 51 colonia El Roble<br />
-                  Ciudad Industrial Merida, Yucatán México C.P 97256
-                </p>
-              </div>
-              <div className="flex items-center space-x-3 group">
-                <Mail
-                  size={18}
-                  className="text-red-500 flex-shrink-0 group-hover:scale-110 transition-transform"
-                />
-                <p className="text-slate-300 text-sm group-hover:text-white transition-colors">
-                  ventas@flucsa.com.mx
-                </p>
-              </div>
-              <div className="flex items-center space-x-3 group">
-                <Phone
-                  size={18}
-                  className="text-red-500 flex-shrink-0 group-hover:scale-110 transition-transform"
-                />
-                <p className="text-slate-300 text-sm group-hover:text-white transition-colors">
-                  +52 9993632630
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Enlaces de Navegación */}
-          <div>
-            <h3 className="text-lg font-bold mb-4 text-white relative">
-              Enlaces Rápidos
-              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-red-500"></div>
-            </h3>
-            <ul className="space-y-2">
-              {['Productos', 'Servicios', 'Acerca de Nosotros', 'Blog', 'Soporte'].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="text-slate-300 text-sm hover:text-white hover:translate-x-1 transition-all duration-300 inline-block group"
-                  >
-                    <span className="border-b border-transparent group-hover:border-red-500 transition-colors">
-                      {item}
-                    </span>
-                  </a>
-                </li>
-              ))}
+            <h4 className="text-white font-bold mb-6 text-lg">Navegación</h4>
+            <ul className="space-y-4 text-sm">
+              <li><a href="#" className="hover:text-teal-400 transition-colors">Sobre Nosotros</a></li>
+              <li><a href="#" className="hover:text-teal-400 transition-colors">Nuestras Colecciones</a></li>
+              <li><a href="#" className="hover:text-teal-400 transition-colors">Servicios de Diseño</a></li>
+              <li><a href="#" className="hover:text-teal-400 transition-colors">Blog de Tendencias</a></li>
             </ul>
           </div>
 
-          {/* Redes Sociales */}
+          {/* Columna 3: Contacto */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-white relative">
-              Síguenos
-              <div className="absolute -bottom-2 left-0 w-12 h-0.5 bg-red-500"></div>
-            </h3>
-            <div className="flex space-x-3 mb-4">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-white hover:bg-red-500 hover:scale-110 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/25 backdrop-blur-sm border border-white/20"
-                  aria-label={`Enlace a ${link.name}`}
+            <h4 className="text-white font-bold mb-6 text-lg">Contacto</h4>
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start space-x-3">
+                <MapPin size={18} className="text-teal-500 shrink-0" />
+                <span>Av. Principal de Diseño #123, Ciudad Creativa</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <Phone size={18} className="text-teal-500 shrink-0" />
+                <span>+1 234 567 890</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <Mail size={18} className="text-teal-500 shrink-0" />
+                <span>contacto@dzain.com</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Columna 4: Newsletter */}
+          <div>
+            <h4 className="text-white font-bold mb-6 text-lg">Newsletter</h4>
+            <p className="text-sm mb-4">Suscríbete para recibir ofertas exclusivas y consejos de diseño.</p>
+            <form className="flex flex-col space-y-2">
+              <div className="relative">
+                <input 
+                  type="email" 
+                  placeholder="Tu email" 
+                  className="w-full bg-slate-800 border border-slate-700 rounded-sm py-2 px-4 focus:outline-none focus:border-teal-500 transition-colors text-sm"
+                />
+                <button 
+                  type="submit" 
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-teal-500 hover:text-teal-400"
                 >
-                  <link.icon size={18} />
-                </a>
-              ))}
-            </div>
-            <p className="text-slate-400 text-xs">
-              Mantente conectado con nuestras últimas noticias y actualizaciones
-            </p>
+                  <ArrowRight size={18} />
+                </button>
+              </div>
+            </form>
           </div>
 
         </div>
 
-        {/* Línea divisoria con gradiente */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent mb-4"></div>
-
-        {/* Copyright */}
-        <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
-          <div className="text-slate-400 text-sm">
-            &copy; {new Date().getFullYear()} Flucsa. Todos los derechos reservados.
-          </div>
-          <div className="flex space-x-4 text-xs text-slate-400">
+        {/* Línea Divisoria y Copyright */}
+        <div className="border-t border-slate-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+          <p>© 2026 D'ZAIN MOBILIARIO. Todos los derechos reservados.</p>
+          <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="hover:text-white transition-colors">Política de Privacidad</a>
-            <a href="#" className="hover:text-white transition-colors">Términos de Uso</a>
-            <a href="#" className="hover:text-white transition-colors">Cookies</a>
+            <a href="#" className="hover:text-white transition-colors">Términos de Servicio</a>
           </div>
         </div>
       </div>

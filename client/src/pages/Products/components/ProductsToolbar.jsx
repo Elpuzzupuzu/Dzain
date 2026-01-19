@@ -1,44 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Grid3x3, List, SlidersHorizontal, Filter } from "lucide-react";
-// Importamos el componente Search que ya funciona
+import { Grid3x3, List, SlidersHorizontal, ChevronDown } from "lucide-react";
 import Search from '../../../components/Header/Search/Search'; 
 
-// --- LÓGICA DE DETECCIÓN DE MÓVIL (Tamaño 'sm' de Tailwind) ---
 const MOBILE_BREAKPOINT_PX = 640; 
 
 const isMobileWindow = () => {
-    // Si no estamos en el navegador (ej. renderizado en el servidor), asumimos falso
     if (typeof window === 'undefined') return false; 
     return window.innerWidth < MOBILE_BREAKPOINT_PX;
 };
-// -----------------------------------------------------------------
 
-// Botón de filtro adaptativo profesional
+// Botón de filtro con estética de "Luxury Boutique"
 const FilterToggleButton = ({ isOpen, onToggle, filterCount }) => (
     <>
-        {/* Versión escritorio */}
+        {/* Versión escritorio: Estilo minimalista oscuro */}
         <button
             onClick={onToggle}
-            className="hidden sm:flex relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 font-medium group"
+            className="hidden sm:flex relative items-center gap-3 px-6 py-3 bg-slate-900 hover:bg-blue-700 text-white transition-all duration-300 font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-slate-200"
         >
-            <SlidersHorizontal className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
-            <span className="text-sm">Filtros</span>
+            <SlidersHorizontal className={`w-4 h-4 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} />
+            <span>Filtros</span>
             {filterCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md">
+                <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center ring-4 ring-white">
                     {filterCount}
                 </span>
             )}
         </button>
 
-        {/* Versión móvil: solo icono */}
+        {/* Versión móvil */}
         <button
             onClick={onToggle}
-            className="sm:hidden relative p-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
+            className="sm:hidden relative p-3 bg-slate-900 text-white rounded-none shadow-md"
             aria-label="Filtros"
         >
             <SlidersHorizontal className="w-5 h-5" />
             {filterCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                     {filterCount}
                 </span>
             )}
@@ -57,112 +53,95 @@ const ProductsToolbar = ({
     setSidebarOpen,
     getFilterCount
 }) => {
-    
-    // 1. Estado para manejar si es móvil
     const [isMobile, setIsMobile] = useState(false);
 
-    // 2. useEffect para detectar el tamaño de la ventana al montar y al cambiar
     useEffect(() => {
-        // Ejecutar al montar
         const handleResize = () => {
             const mobile = isMobileWindow();
             setIsMobile(mobile);
-            
-            // LÓGICA CLAVE: Si es móvil, forzar siempre el modo de lista
-            if (mobile) {
-                setViewMode("list");
-            }
+            if (mobile) setViewMode("list");
         };
-
-        handleResize(); // Ejecutar al inicio
-
-        // Escuchar cambios de tamaño de ventana
+        handleResize();
         window.addEventListener('resize', handleResize);
-        
-        // Limpieza: Remover el listener al desmontar el componente
         return () => window.removeEventListener('resize', handleResize);
     }, [setViewMode]);
-    
 
-    // Manejador del cambio de modo de vista
     const handleViewModeChange = (mode) => {
-        // Prevenir el cambio a 'grid' si estamos en modo móvil
-        if (isMobile && mode === 'grid') {
-            return; 
-        }
+        if (isMobile && mode === 'grid') return; 
         setViewMode(mode);
     };
 
     return (
-        <div className="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 backdrop-blur-sm relative z-40">
+        <div className="mb-10 bg-white border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] relative z-40">
+            {/* Línea de acento sutil */}
+            <div className="h-[2px] bg-slate-100 w-full">
+                <div 
+                    className="h-full bg-blue-600 transition-all duration-1000" 
+                    style={{ width: sidebarOpen ? '100%' : '15%' }}
+                />
+            </div>
 
-            {/* Barra decorativa superior con gradiente profesional */}
-            <div className="h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-t-2xl"></div>
+            <div className="p-4 lg:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
 
-            <div className="p-5 lg:p-6 space-y-4 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-6">
-
-                {/* Sección de búsqueda */}
-                <div className="flex items-center gap-3 flex-1 max-w-2xl">
+                {/* Buscador y Filtros */}
+                <div className="flex items-center gap-4 flex-1">
                     <FilterToggleButton
                         isOpen={sidebarOpen}
                         onToggle={() => setSidebarOpen(prev => !prev)}
                         filterCount={getFilterCount()}
                     />
 
-                    {/* CONTENEDOR DE BÚSQUEDA - Contiene el componente Search */}
                     <div className="relative flex-1 group">
-                        <Search /> 
+                        {/* El componente Search heredará el estilo del contenedor si es flexible */}
+                        <div className="w-full bg-slate-50 border-b border-transparent focus-within:border-blue-600 transition-all duration-300 px-2">
+                            <Search /> 
+                        </div>
                     </div>
                 </div>
 
-                {/* Sección de controles */}
-                <div className="flex items-center gap-3 flex-wrap justify-end">
-
-                    {/* Items per page Dropdown */}
-                    <div className="hidden sm:flex relative group">
-                        <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
-                        <select
-                            value={itemsPerPage}
-                            onChange={(e) => setItemsPerPage(Math.max(14, Number(e.target.value)))}
-                            className="pl-10 pr-10 py-2.5 border border-gray-200 rounded-xl text-sm font-medium bg-white hover:bg-gray-50 hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200 cursor-pointer outline-none appearance-none bg-no-repeat bg-right"
-                            style={{
-                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                                backgroundPosition: 'right 0.5rem center',
-                                backgroundSize: '1.25em 1.25em',
-                                paddingRight: '2.5rem'
-                            }}
-                        >
-                            <option value={14}>14 productos</option>
-                            <option value={21}>21 productos</option>
-                            <option value={42}>42 productos</option>
-                        </select>
+                {/* Controles de Visualización */}
+                <div className="flex items-center gap-6 justify-between lg:justify-end border-t lg:border-t-0 pt-4 lg:pt-0">
+                    
+                    {/* Selector de cantidad: Minimalista */}
+                    <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hidden xl:inline">Mostrar:</span>
+                        <div className="relative">
+                            <select
+                                value={itemsPerPage}
+                                onChange={(e) => setItemsPerPage(Math.max(14, Number(e.target.value)))}
+                                className="appearance-none bg-white border border-slate-200 pl-4 pr-10 py-2 text-xs font-bold text-slate-700 hover:border-slate-400 transition-colors cursor-pointer focus:outline-none"
+                            >
+                                <option value={14}>14 Unidades</option>
+                                <option value={21}>21 Unidades</option>
+                                <option value={42}>42 Unidades</option>
+                            </select>
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
+                        </div>
                     </div>
 
-                    {/* View Mode Toggle */}
-                    <div className="flex bg-gray-50 border border-gray-200 rounded-xl p-1 shadow-sm">
+                    {/* Selector de Modo: Industrial/Moderno */}
+                    <div className="flex bg-slate-100 p-1 gap-1">
                         <button
                             onClick={() => handleViewModeChange("grid")}
-                            disabled={isMobile} 
-                            className={`p-2 rounded-lg transition-all duration-200 ${
-                                isMobile ? "text-gray-300 cursor-not-allowed" : 
+                            disabled={isMobile}
+                            className={`p-2 transition-all duration-300 ${
+                                isMobile ? "opacity-20 cursor-not-allowed" : 
                                 viewMode === "grid"
-                                    ? "bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-sm"
-                                    : "text-gray-500 hover:text-gray-700 hover:bg-white"
+                                    ? "bg-white text-blue-600 shadow-sm"
+                                    : "text-slate-400 hover:text-slate-600"
                             }`}
-                            aria-label="Vista de cuadrícula"
                         >
-                            <Grid3x3 className="w-5 h-5" />
+                            <Grid3x3 className="w-4 h-4" />
                         </button>
                         <button
                             onClick={() => handleViewModeChange("list")}
-                            className={`p-2 rounded-lg transition-all duration-200 ${
+                            className={`p-2 transition-all duration-300 ${
                                 viewMode === "list"
-                                    ? "bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-sm"
-                                    : "text-gray-500 hover:text-gray-700 hover:bg-white"
+                                    ? "bg-white text-blue-600 shadow-sm"
+                                    : "text-slate-400 hover:text-slate-600"
                             }`}
-                            aria-label="Vista de lista"
                         >
-                            <List className="w-5 h-5" />
+                            <List className="w-4 h-4" />
                         </button>
                     </div>
 

@@ -1,169 +1,82 @@
-// SlideContent.jsx
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const SlideContent = ({ data, direction }) => {
-  const slideRef = useRef(null);
-  const overlayRef = useRef(null);
-  const iconRef = useRef(null);
-  const categoryRef = useRef(null);
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-  const descriptionRef = useRef(null);
-  const ctaRef = useRef(null);
-
-  const Icon = data.icon;
-
-  useEffect(() => {
-    // Resetear animaciones antes de iniciar el timeline para la nueva slide
-    gsap.set(
-      [
-        slideRef.current,
-        overlayRef.current,
-        iconRef.current,
-        categoryRef.current,
-        titleRef.current,
-        subtitleRef.current,
-        descriptionRef.current,
-        ctaRef.current,
-      ],
-      { clearProps: "all" }
-    );
-
-    const tl = gsap.timeline();
-
-    // Animación del overlay
-    tl.fromTo(
-      overlayRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.6, ease: "power2.inOut" }
-    );
-
-    // Animación de la imagen con efecto parallax
-    tl.fromTo(
-      slideRef.current,
-      { scale: 1.2, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1.4, ease: "power3.out" },
-      0
-    );
-
-
-
-    // Animación de la categoría desde arriba (letra)
-    tl.fromTo(
-      categoryRef.current,
-      { y: -50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" },
-      0.4
-    );
-
-    // Animación del título con rotación en eje X (letra)
-    tl.fromTo(
-      titleRef.current,
-      { rotateX: direction * 90, opacity: 0, transformOrigin: "center center" },
-      { rotateX: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
-      0.5
-    );
-
-    // Animación del subtítulo con rotación en eje X (letra)
-    tl.fromTo(
-      subtitleRef.current,
-      { rotateX: direction * 90, opacity: 0, transformOrigin: "center center" },
-      { rotateX: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
-      0.7
-    );
-
-    // Animación de la descripción con efecto de fade (letra)
-    tl.fromTo(
-      descriptionRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-      0.9
-    );
-
-    // Animación del botón CTA con bounce
-    tl.fromTo(
-      ctaRef.current,
-      { scale: 0.8, opacity: 0, y: 20 },
-      { scale: 1, opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.5)" },
-      1.1
-    );
-
-   
-  }, [data, direction]); // Re-ejecutar al cambiar la data o la dirección
-
   return (
-    <>
-      {/* Imagen de fondo */}
-      <div className="absolute inset-0">
-        <img
-          ref={slideRef}
+    <AnimatePresence mode="wait" custom={direction}>
+      <motion.div
+        key={data.id}
+        initial={{ opacity: 0, x: direction * 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -direction * 50 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute inset-0 w-full h-full"
+      >
+        {/* Imagen de Fondo con Zoom Suave */}
+        <motion.img
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 8 }}
           src={data.image}
           alt={data.title}
-          className="w-full h-full object-cover"
+          className="object-cover w-full h-full"
         />
-        <div
-          ref={overlayRef}
-          className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"
-        />
-      </div>
 
-      {/* Contenido */}
-      <div className="absolute inset-0 z-30 flex items-center">
-        <div className="container mx-auto px-6 lg:px-16 max-w-7xl">
-          <div className="max-w-3xl">
-            {/* Icono - Ahora aparecerá sin animación de GSAP, solo con el reset inicial */}
-            <div ref={iconRef} className="mb-6">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-600/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl">
-                <Icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
-              </div>
-            </div>
-
-            {/* Categoría */}
-            <div ref={categoryRef} className="mb-4">
-              <span className="inline-block px-4 py-2 bg-blue-600/80 backdrop-blur-sm text-white text-sm md:text-base font-medium rounded-full shadow-lg">
-                {data.category}
-              </span>
-            </div>
-
-            {/* Título y Subtítulo */}
-            <h1 className="mb-6" style={{ perspective: "1000px" }}>
-              <span
-                ref={titleRef}
-                className="block text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-2 leading-tight"
-                style={{ transformStyle: "preserve-3d" }}
+        {/* Información de la Oficina */}
+        <div className="absolute inset-0 z-20 flex items-center">
+          <div className="container mx-auto px-6 md:px-12">
+            <div className="max-w-2xl">
+              <motion.span 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-widest text-blue-400 uppercase border border-blue-400/30 bg-blue-400/10 backdrop-blur-md"
               >
-                {data.title}
-              </span>
-              <span
-                ref={subtitleRef}
-                className="block text-4xl md:text-5xl lg:text-6xl font-light text-white/90 leading-tight"
-                style={{ transformStyle: "preserve-3d" }}
+                {data.category || "Premium Real Estate"}
+              </motion.span>
+              
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="text-5xl md:text-7xl font-light text-white leading-tight mb-6"
               >
-                {data.subtitle}
-              </span>
-            </h1>
+                {data.title} <span className="font-bold text-blue-500">.</span>
+              </motion.h1>
 
-            {/* Descripción */}
-            <p
-              ref={descriptionRef}
-              className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl leading-relaxed"
-            >
-              {data.description}
-            </p>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+                className="text-lg md:text-xl text-slate-300 mb-10 font-light leading-relaxed"
+              >
+                {data.description}
+              </motion.p>
 
-            {/* CTA Button */}
-            <button
-              ref={ctaRef}
-              className="group relative px-8 py-4 bg-blue-600 text-white font-semibold text-lg rounded-lg overflow-hidden shadow-2xl transition-all duration-300 hover:bg-blue-700 hover:shadow-blue-500/50 hover:-translate-y-1"
-            >
-              <span className="relative z-10">{data.cta}</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </button>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9 }}
+                className="flex flex-wrap gap-4"
+              >
+                <a 
+                  href={data.link} 
+                  className="px-8 py-4 bg-white text-slate-900 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300"
+                >
+                  Ver Detalles
+                </a>
+                <a 
+                  href="/contacto" 
+                  className="px-8 py-4 border border-white/30 text-white font-medium hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+                >
+                  Agendar Visita
+                </a>
+              </motion.div>
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

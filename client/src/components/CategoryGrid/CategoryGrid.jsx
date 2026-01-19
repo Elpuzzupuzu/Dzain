@@ -1,138 +1,145 @@
 import React from 'react';
-import { Truck, Wrench, ShoppingBag } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { Building2, ShieldCheck, MapPin, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-// Imágenes de ejemplo - reemplaza con tus imports reales
-import domesticoImg from '../../assets/imgs/domestico.jpg';
-import piscinaImg from '../../assets/imgs/piscina-playa.jpg';
-import ferreteriaImg from '../../assets/imgs/ferreteria.jpg';
-import industrialImg from '../../assets/imgs/industrial.jpg';
-
-// CategoryCard simulado - mantén tu componente original
-const CategoryCard = ({ title, image }) => {
+const CategoryCard = ({ title, image, onClick, subtitle }) => {
   return (
-    <div className="group bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-      <div className="relative h-64 overflow-hidden">
+    <motion.div 
+      whileHover={{ y: -8 }}
+      onClick={onClick}
+      className="group relative overflow-hidden bg-white cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 rounded-sm"
+    >
+      <div className="relative h-[450px] w-full overflow-hidden">
         <img
           src={image}
           alt={title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent opacity-90" />
+        
+        <div className="absolute bottom-0 left-0 w-full p-8">
+          <p className="text-blue-400 text-xs font-bold uppercase tracking-[0.2em] mb-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+            Ver Disponibilidad
+          </p>
+          <h3 className="text-2xl font-light text-white tracking-tight leading-none mb-2">
+            {title}
+          </h3>
+          <p className="text-slate-400 text-sm font-light mb-4 opacity-80 group-hover:opacity-100">
+            {subtitle}
+          </p>
+          <div className="w-0 h-[1px] bg-blue-500 group-hover:w-full transition-all duration-700" />
+        </div>
       </div>
-      <div className="p-5 bg-white">
-        <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-          {title}
-        </h3>
-      </div>
-    </div>
+    </motion.div>
   );
 };
 
-// CategoryGrid con diseño profesional
 function CategoryGrid() {
-  // 1. Inicializa el hook de navegación
   const navigate = useNavigate(); 
   
   const categories = [
-    {
-      title: 'Doméstico',
-      image: domesticoImg
+    { 
+      title: 'Distrito Financiero', 
+      subtitle: 'Oficinas Clase A+',
+      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop' 
     },
-    {
-      title: 'Piscina',
-      image: piscinaImg
+    { 
+      title: 'Centros de Innovación', 
+      subtitle: 'Espacios Coworking Premium',
+      image: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop' 
     },
-    {
-      title: 'Ferretería',
-      image: ferreteriaImg
+    { 
+      title: 'Sedes Corporativas', 
+      subtitle: 'Edificios Independientes',
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop' 
     },
-    {
-      title: 'Industrial',
-      image: industrialImg
+    { 
+      title: 'Desarrollos Verdes', 
+      subtitle: 'Certificación LEED',
+      image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop' 
     },
   ];
 
-  // 2. Función que llama a navigate()
-  const handleViewProducts = () => {
-    // Redirige a la ruta "/productos"
-    navigate("/productos");
-  };
-
   return (
-    <section className="bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-            <span className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
-              Explora por categoría
-            </span>
+    <section className="bg-white py-24 px-6 lg:px-12">
+      <div className="max-w-[1440px] mx-auto">
+        
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="h-[1px] w-12 bg-blue-600"></span>
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-[0.3em]">
+                Portafolio Inmobiliario
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-light text-slate-900 tracking-tight">
+              Espacios que inspiran <span className="font-bold border-b-4 border-blue-600/20">éxito.</span>
+            </h2>
+            <p className="mt-6 text-slate-500 text-lg font-light leading-relaxed">
+              Curaduría exclusiva de propiedades corporativas en las ubicaciones más estratégicas de la ciudad.
+            </p>
           </div>
-          <h2 className="text-3xl font-semibold text-gray-900 mb-3">
-            Principales Categorías
-          </h2>
-          <p className="text-gray-600 max-w-3xl">
-            Descubre nuestra amplia gama de productos organizados por categorías, 
-            cada sección está diseñada para satisfacer tus necesidades específicas.
-          </p>
+          
+          <button 
+            onClick={() => navigate("/propiedades")}
+            className="group flex items-center gap-3 px-10 py-5 bg-slate-950 text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-700 transition-all duration-500"
+          >
+            Explorar todas las sedes
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+          </button>
         </div>
 
-        {/* Grid de categorías */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
           {categories.map((category, index) => (
             <CategoryCard 
               key={index}
               title={category.title}
+              subtitle={category.subtitle}
               image={category.image}
-              
-
-              
+              onClick={() => navigate("/propiedades")}
             />
           ))}
         </div>
 
-        {/* Botón CTA */}
-        <div className="text-center mb-16">
-          <button 
-            // 3. Asigna la función de navegación al evento onClick
-            onClick={handleViewProducts}  
-            className="px-8 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
-          >
-            Ver Todos los Productos
-          </button>
-        </div>
-
-        {/* Servicios destacados */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-gray-200">
-          <div className="flex flex-col items-center text-center group">
-            <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
-              <Truck className="w-6 h-6 text-blue-600" />
-            </div>
-            <h4 className="font-semibold text-gray-900 mb-2">Envío</h4>
-            <p className="text-gray-600 text-sm">Servicio de entrega nacional</p>
-          </div>
-
-          <div className="flex flex-col items-center text-center group">
-            <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-100 transition-colors">
-              <Wrench className="w-6 h-6 text-green-600" />
-            </div>
-            <h4 className="font-semibold text-gray-900 mb-2">Ingeniería del plástico</h4>
-            <p className="text-gray-600 text-sm">Soluciones técnicas especializadas</p>
-          </div>
-
-          <div className="flex flex-col items-center text-center group">
-            <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-100 transition-colors">
-              <ShoppingBag className="w-6 h-6 text-purple-600" />
-            </div>
-            <h4 className="font-semibold text-gray-900 mb-2">Venta / Equipamientos</h4>
-            <p className="text-gray-600 text-sm">Equipo profesional y comercial</p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100 border-t border-slate-100 pt-16">
+          <ServiceItem 
+            Icon={Building2} 
+            title="Gestión de Activos" 
+            desc="Administración integral de edificios corporativos con estándares internacionales de mantenimiento."
+            color="text-slate-900"
+            bgColor="bg-slate-50"
+          />
+          <ServiceItem 
+            Icon={ShieldCheck} 
+            title="Asesoría Legal" 
+            desc="Soporte completo en contratos de arrendamiento, normativas locales y cumplimiento corporativo."
+            color="text-blue-600"
+            bgColor="bg-blue-50"
+          />
+          <ServiceItem 
+            Icon={MapPin} 
+            title="Ubicaciones Prime" 
+            desc="Análisis de mercado para asegurar que su empresa se posicione en los hubs de mayor plusvalía."
+            color="text-slate-900"
+            bgColor="bg-slate-50"
+          />
         </div>
       </div>
     </section>
   );
 }
+
+const ServiceItem = ({ Icon, title, desc, color, bgColor }) => (
+  <div className="flex flex-col p-10 group hover:bg-slate-50 transition-all duration-300">
+    <div className={`w-12 h-12 ${bgColor} flex items-center justify-center mb-8 transition-all duration-500 group-hover:bg-slate-900 group-hover:text-white`}>
+      <Icon className={`w-5 h-5 transition-colors duration-500`} />
+    </div>
+    <h4 className="text-xs font-bold text-slate-900 mb-4 uppercase tracking-[0.2em]">{title}</h4>
+    <p className="text-slate-500 font-light leading-relaxed text-sm">
+      {desc}
+    </p>
+  </div>
+);
 
 export default CategoryGrid;

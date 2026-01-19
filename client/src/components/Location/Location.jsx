@@ -1,127 +1,113 @@
 import React from 'react';
-import { MapPin, Phone, Mail, Navigation } from 'lucide-react';
+import { MapPin, Phone, Mail, Navigation, Clock } from 'lucide-react';
 
 const Location = () => {
   const companyInfo = {
-    address: 'Calle 26a entre 47 y 51. Colonia el Roble, Ciudad Industrial Mérida, Yucatán. C.P 97256',
-    phone: '+52 9993632630',
-    email: 'ventas@flucsa.com.mx',
-    mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3372.6079938646676!2d-89.68317442528853!3d20.91822699156695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f5671bd64b9191f%3A0x1ac55c2e725e84a9!2sFLUCSA%20S.A%20DE%20C.V!5e1!3m2!1ses-419!2smx!4v1760195817751!5m2!1ses-419!2smx',
+    name: 'DZ Mobiliario',
+    address: 'Calle 69d #686b, Jardines de Caucel, C.P. 97314, Mérida, Yucatán',
+    phone: '9999684966',
+    email: 'dzmobiliario@outlook.com',
+    // URL de Google Maps para el iframe (Sustituir por el src real de "Compartir > Insertar mapa")
+    mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.87123456789!2d-89.7000000!3d20.9800000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjDCsDU4JzQ4LjAiTiA4OcKwNDInMDAuMCJX!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx',
   };
 
   return (
-    <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header minimalista */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-3">
-            Nuestra Ubicación
-          </h2>
-          <p className="text-gray-600 max-w-2xl">
-            Visítanos en nuestra sucursal o contáctanos por los medios que prefieras.
+    <section className="bg-slate-50 py-24 px-6 lg:px-12">
+      <div className="max-w-[1400px] mx-auto">
+        
+        {/* Encabezado Editorial */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-8 h-[1px] bg-slate-400"></span>
+              <span className="text-xs font-bold tracking-[0.3em] text-slate-500 uppercase">Presencia Local</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-light text-slate-900 leading-tight">
+              Visite nuestro <span className="font-bold">Showroom</span>
+            </h2>
+          </div>
+          <p className="text-slate-500 text-lg font-light max-w-sm border-l border-slate-200 pl-6">
+            Atención personalizada para proyectos corporativos y residenciales de alto impacto.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Mapa */}
-          <div className="order-2 lg:order-1">
-            <div className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200 h-full shadow-sm">
-              <iframe
-                title="Ubicación de la empresa"
-                src={companyInfo.mapEmbedUrl}
-                className="w-full h-96 lg:h-full min-h-96"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-          </div>
-
-          {/* Información de contacto */}
-          <div className="order-1 lg:order-2 space-y-6">
-            {/* Dirección */}
-            <div className="flex items-start gap-4 group">
-              <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 group-hover:bg-blue-100 transition-colors">
-                <MapPin className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-1 uppercase tracking-wide">
-                  Dirección
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
+        <div className="bg-white shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+          
+          {/* Columna de Información (Lado Izquierdo) */}
+          <div className="lg:w-2/5 p-10 md:p-16 flex flex-col justify-between bg-slate-900 text-white">
+            <div className="space-y-12">
+              
+              {/* Bloque: Dirección */}
+              <div className="group">
+                <div className="flex items-center gap-3 mb-4">
+                  <MapPin className="w-5 h-5 text-blue-400" />
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Ubicación Principal</h3>
+                </div>
+                <p className="text-xl font-light leading-relaxed text-slate-200">
                   {companyInfo.address}
                 </p>
               </div>
-            </div>
 
-            <div className="border-t border-gray-200"></div>
+              {/* Bloque: Contacto Directo */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:grid-cols-1">
+                <div className="group">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Phone className="w-4 h-4 text-blue-400" />
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Teléfono</h3>
+                  </div>
+                  <a href={`tel:${companyInfo.phone}`} className="text-lg font-light hover:text-blue-400 transition-colors">
+                    {companyInfo.phone}
+                  </a>
+                </div>
 
-            {/* Teléfono */}
-            <div className="flex items-start gap-4 group">
-              <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 group-hover:bg-green-100 transition-colors">
-                <Phone className="w-5 h-5 text-green-600" />
+                <div className="group">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Mail className="w-4 h-4 text-blue-400" />
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Email</h3>
+                  </div>
+                  <a href={`mailto:${companyInfo.email}`} className="text-lg font-light hover:text-blue-400 transition-colors break-words">
+                    {companyInfo.email}
+                  </a>
+                </div>
               </div>
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-1 uppercase tracking-wide">
-                  Teléfono
-                </h3>
-                <a 
-                  href={`tel:${companyInfo.phone}`} 
-                  className="text-gray-600 hover:text-green-600 transition-colors"
-                >
-                  {companyInfo.phone}
-                </a>
-              </div>
-            </div>
 
-            <div className="border-t border-gray-200"></div>
-
-            {/* Email */}
-            <div className="flex items-start gap-4 group">
-              <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 group-hover:bg-purple-100 transition-colors">
-                <Mail className="w-5 h-5 text-purple-600" />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-1 uppercase tracking-wide">
-                  Email
-                </h3>
-                <a 
-                  href={`mailto:${companyInfo.email}`} 
-                  className="text-gray-600 hover:text-purple-600 transition-colors"
-                >
-                  {companyInfo.email}
-                </a>
+              {/* Bloque: Horarios */}
+              <div className="pt-8 border-t border-slate-800">
+                <div className="flex items-center gap-3 mb-4">
+                  <Clock className="w-4 h-4 text-slate-400" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Horario de Oficina</span>
+                </div>
+                <div className="space-y-1 text-sm text-slate-300 font-light">
+                  <p>Lunes — Viernes: 08:00 a 18:00 hrs</p>
+                  <p>Sábado: 09:00 a 14:00 hrs</p>
+                </div>
               </div>
             </div>
 
-            {/* Botón Cómo llegar */}
-            <div className="pt-6">
+            {/* Botón CTA */}
+            <div className="mt-12">
               <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(companyInfo.address)}&travelmode=driving`}
+                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(companyInfo.address)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-3 bg-blue-600 text-white px-8 py-4 w-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-all duration-300"
               >
                 <Navigation className="w-4 h-4" />
-                <span>Cómo llegar</span>
+                Obtener Ruta
               </a>
             </div>
+          </div>
 
-            {/* Horarios (opcional) */}
-            <div className="pt-4 pb-2">
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900 mb-2 uppercase tracking-wide">
-                  Horario de Atención
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Lunes a Viernes: 8:00 AM - 6:00 PM
-                </p>
-                <p className="text-sm text-gray-600">
-                  Sábado: 9:00 AM - 2:00 PM
-                </p>
-              </div>
-            </div>
+          {/* Contenedor del Mapa (Lado Derecho) */}
+          <div className="lg:w-3/5 min-h-[500px] relative grayscale hover:grayscale-0 transition-all duration-700">
+            <iframe
+              title="Sede DZ Mobiliario"
+              src={companyInfo.mapEmbedUrl}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+            ></iframe>
           </div>
         </div>
       </div>

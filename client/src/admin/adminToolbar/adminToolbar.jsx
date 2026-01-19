@@ -1,19 +1,18 @@
-import { Grid3x3, List, SlidersHorizontal, Filter, TrendingUp, PlusCircle } from "lucide-react";
+import React from 'react';
+import { Grid3x3, List, SlidersHorizontal, Filter, TrendingUp, PlusCircle, ChevronDown } from "lucide-react";
 import Search from "../adminToolbar/adminSearch";
 
-// Botón de filtro adaptativo
 const FilterToggleButton = ({ isOpen, onToggle, filterCount }) => (
   <>
     {/* Versión escritorio */}
     <button
       onClick={onToggle}
-      className="hidden sm:flex relative flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 font-medium group"
+      className="hidden sm:flex relative items-center gap-3 px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white transition-all duration-300 font-bold uppercase tracking-widest text-[10px] shadow-sm group"
     >
-      <SlidersHorizontal className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+      <SlidersHorizontal className={`w-4 h-4 transition-transform duration-500 ${isOpen ? 'rotate-90' : ''}`} />
       <span>Filtros</span>
-
       {filterCount > 0 && (
-        <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg animate-pulse">
+        <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-lg ring-2 ring-white">
           {filterCount}
         </span>
       )}
@@ -22,12 +21,12 @@ const FilterToggleButton = ({ isOpen, onToggle, filterCount }) => (
     {/* Versión móvil */}
     <button
       onClick={onToggle}
-      className="sm:hidden relative p-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+      className="sm:hidden relative p-3 bg-slate-900 text-white shadow-md"
       aria-label="Filtros"
     >
       <SlidersHorizontal className="w-5 h-5" />
       {filterCount > 0 && (
-        <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+        <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
           {filterCount}
         </span>
       )}
@@ -46,105 +45,99 @@ const ProductsToolbar = ({
   setSidebarOpen,
   getFilterCount,
   onAdminProductSelect,
-  onOpenCreateModal // Nuevo
+  onOpenCreateModal 
 }) => (
-  <div className="mb-8 bg-white rounded-2xl shadow-lg border border-gray-200 backdrop-blur-sm relative z-40">
+  <div className="mb-10 bg-white border border-slate-200 shadow-sm relative z-40">
+    
+    {/* Línea decorativa superior sutil */}
+    <div className="h-[3px] bg-slate-100 w-full">
+        <div className="h-full bg-blue-600 w-24"></div>
+    </div>
 
-    <div className="h-1 bg-gradient-to-r from-red-blue via-red-500 to-blue-600 rounded-t-2xl"></div>
+    <div className="p-5 lg:p-6 space-y-5 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-6">
 
-    <div className="p-6 space-y-5 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-6">
-
-      {/* Búsqueda + Acciones */}
-      <div className="flex items-center gap-3 flex-1 max-w-2xl">
-
+      {/* Búsqueda + Acciones Principales */}
+      <div className="flex items-center gap-4 flex-1 max-w-3xl">
+        
         <FilterToggleButton
           isOpen={sidebarOpen}
           onToggle={() => setSidebarOpen(prev => !prev)}
           filterCount={getFilterCount()}
         />
 
-        {/* Botón crear producto */}
+        {/* Botón Añadir: Estilo Corporativo */}
         <button
           onClick={onOpenCreateModal}
-          className="relative flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 font-medium"
+          className="flex items-center gap-3 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300 font-bold uppercase tracking-widest text-[10px] shadow-sm"
         >
-          <PlusCircle className="w-5 h-5" />
-          <span className="hidden sm:inline">Añadir producto</span>
+          <PlusCircle className="w-4 h-4" />
+          <span className="hidden md:inline">Nuevo Producto/servicio</span>
         </button>
 
-        {/* Buscador */}
+        {/* Buscador: Contenedor refinado */}
         <div className="relative flex-1 group">
-          <Search onAdminProductSelect={onAdminProductSelect} />
+          <div className="bg-slate-50 border-b border-transparent focus-within:border-blue-600 transition-all duration-300 px-1">
+            <Search onAdminProductSelect={onAdminProductSelect} />
+          </div>
         </div>
-
       </div>
 
-      {/* Controles */}
-      <div className="flex items-center gap-3 flex-wrap justify-end">
+      {/* Controles de Visualización y Orden */}
+      <div className="flex items-center gap-4 flex-wrap justify-end">
 
-        {/* Ordenar */}
-        <div className="hidden sm:flex relative group">
-          <TrendingUp className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+        {/* Selector: Ordenar */}
+        <div className="hidden sm:block relative group">
+          <TrendingUp className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-3.5 h-3.5 pointer-events-none" />
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm font-medium bg-gray-50 hover:bg-white hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 cursor-pointer outline-none appearance-none bg-no-repeat bg-right"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundPosition: "right 0.5rem center",
-              backgroundSize: "1.5em 1.5em",
-              paddingRight: "2.5rem"
-            }}
+            className="appearance-none pl-9 pr-10 py-2.5 bg-white border border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-700 hover:border-slate-400 focus:outline-none cursor-pointer transition-colors"
           >
-            <option value="price-asc">Precio: Menor a Mayor</option>
-            <option value="price-desc">Precio: Mayor a Menor</option>
+            <option value="price-asc">Precio: Ascendente</option>
+            <option value="price-desc">Precio: Descendente</option>
           </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
         </div>
 
-        {/* Items por página */}
-        <div className="hidden sm:flex relative group">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+        {/* Selector: Items por página */}
+        <div className="hidden sm:block relative">
+          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-3.5 h-3.5 pointer-events-none" />
           <select
             value={itemsPerPage}
             onChange={(e) => setItemsPerPage(Math.max(14, Number(e.target.value)))}
-            className="pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-sm font-medium bg-gray-50 hover:bg-white hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 cursor-pointer outline-none appearance-none bg-no-repeat bg-right"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundPosition: "right 0.5rem center",
-              backgroundSize: "1.5em 1.5em",
-              paddingRight: "2.5rem"
-            }}
+            className="appearance-none pl-9 pr-10 py-2.5 bg-white border border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-700 hover:border-slate-400 focus:outline-none cursor-pointer transition-colors"
           >
-            <option value={14}>14 productos</option>
-            <option value={21}>21 productos</option>
-            <option value={42}>42 productos</option>
+            <option value={14}>14 Resultados</option>
+            <option value={21}>21 Resultados</option>
+            <option value={42}>42 Resultados</option>
           </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
         </div>
 
-        {/* Vista */}
-        <div className="flex bg-gray-100 border-2 border-gray-200 rounded-xl p-1.5 shadow-sm">
+        {/* Toggle de Vista: Estilo Minimalista */}
+        <div className="flex bg-slate-100 p-1 gap-1">
           <button
             onClick={() => setViewMode("grid")}
-            className={`p-2.5 rounded-lg transition-all duration-300 ${
+            className={`p-2 transition-all duration-300 ${
               viewMode === "grid"
-                ? "bg-gradient-to-br from-red-600 to-red-700 text-white shadow-md transform scale-105"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-200"
+                ? "bg-white text-blue-600 shadow-sm"
+                : "text-slate-400 hover:text-slate-600"
             }`}
             aria-label="Vista de cuadrícula"
           >
-            <Grid3x3 className="w-5 h-5" />
+            <Grid3x3 className="w-4 h-4" />
           </button>
 
           <button
             onClick={() => setViewMode("list")}
-            className={`p-2.5 rounded-lg transition-all duration-300 ${
+            className={`p-2 transition-all duration-300 ${
               viewMode === "list"
-                ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-md transform scale-105"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-200"
+                ? "bg-white text-blue-600 shadow-sm"
+                : "text-slate-400 hover:text-slate-600"
             }`}
             aria-label="Vista de lista"
           >
-            <List className="w-5 h-5" />
+            <List className="w-4 h-4" />
           </button>
         </div>
 

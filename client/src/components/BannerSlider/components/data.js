@@ -1,41 +1,18 @@
-// data.js
-import { Droplet, Gauge, Wrench } from "lucide-react";
-import pipes from "../../../assets/images/pipes.jpg";
-import pvc from  "../../../assets/images/pvc.jpg";
-import bomb from  "../../../assets/images/bombita.jpg";
-
 export const slidesData = [
   {
     id: 1,
-    image: pipes,
-    category: "Sistemas de Flujo Premium",
-    title: "Válvulas y Bombas",
-    subtitle: "de Alto Rendimiento",
-    description:
-      "Componentes hidráulicos de precisión para un control y caudal óptimos en cualquier aplicación.",
-    cta: "Ver Hidráulicos",
-    icon: Droplet,
+    title: "Torre Corporativa Skyline",
+    description: "Espacios de oficina triple A en el corazón del distrito financiero, diseñados para la máxima productividad.",
+    category: "Edificio de Lujo",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2000",
+    link: "/inmuebles/torre-skyline"
   },
   {
     id: 2,
-    image: pvc,
-    category: "Infraestructura Duradera",
-    title: "Tubería PVC y CPVC",
-    subtitle: "Industrial y Residencial",
-    description:
-      "Soluciones resistentes a la corrosión, ideales para instalaciones de agua, drenaje y conducción de fluidos.",
-    cta: "Explorar Tubería",
-    icon: Gauge,
-  },
-  {
-    id: 3,
-    image: bomb,
-    category: "Conexiones y Herramientas",
-    title: "Todo lo que Necesitas",
-    subtitle: "para tu Instalación",
-    description:
-      "Bridas, codos, adaptadores y herramientas profesionales para garantizar un sellado perfecto y seguro.",
-    cta: "Comprar Conexiones",
-    icon: Wrench,
-  },
+    title: "Hub Tecnológico Loft",
+    description: "Ambientes abiertos y modernos con certificaciones sustentables para empresas de innovación.",
+    category: "Coworking & Privados",
+    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=2000",
+    link: "/inmuebles/hub-loft"
+  }
 ];
