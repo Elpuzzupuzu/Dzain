@@ -62,8 +62,8 @@ const Navigation = ({
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2 rounded-md transition-all ${
                 isActive
-                  ? 'bg-teal-50 text-teal-600'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-teal-600'
+                  ? 'bg-amber-50 text-amber-700'
+                  : 'text-zinc-700 hover:bg-stone-50 hover:text-amber-700'
               }`
             }
           >
@@ -72,21 +72,21 @@ const Navigation = ({
           </NavLink>
         ))}
 
-        <div className="border-t border-gray-100 my-2" />
+        <div className="border-t border-stone-200 my-2" />
 
         {isLoggedIn ? (
           <>
             <NavLink
               to="/mi-cuenta"
               onClick={onLinkClick}
-              className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:text-teal-600"
+              className="flex items-center gap-3 px-3 py-2 text-zinc-700 hover:text-amber-700"
             >
               <User size={18} />
               <span className="font-medium text-xs">MI CUENTA</span>
             </NavLink>
             <button
               onClick={() => { onLogout(); onLinkClick(); }}
-              className="flex items-center gap-3 px-3 py-2 text-red-500 hover:bg-red-50"
+              className="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50"
             >
               <LogOut size={18} />
               <span className="font-medium text-xs">CERRAR SESIÓN</span>
@@ -96,7 +96,7 @@ const Navigation = ({
           <NavLink
             to="/login"
             onClick={onLinkClick}
-            className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:text-teal-600"
+            className="flex items-center gap-3 px-3 py-2 text-zinc-700 hover:text-amber-700"
           >
             <LogIn size={18} />
             <span className="font-medium text-xs">INICIAR SESIÓN</span>
@@ -119,8 +119,8 @@ const Navigation = ({
           className={({ isActive }) =>
             `${desktopItemClasses} ${
               isActive 
-                ? 'text-teal-600 border-b-2 border-teal-600' 
-                : 'text-white hover:text-teal-600'
+                ? 'text-amber-700 border-b-2 border-amber-700' 
+                : 'text-zinc-700 hover:text-amber-700'
             }`
           }
         >
@@ -137,8 +137,8 @@ const Navigation = ({
             className={({ isActive }) =>
               `${desktopItemClasses} ${
                 isActive 
-                  ? 'text-teal-600 border-b-2 border-teal-600' 
-                  : 'text-teal-500 hover:text-teal-600'
+                  ? 'text-amber-700 border-b-2 border-amber-700' 
+                  : 'text-amber-600 hover:text-amber-700'
               }`
             }
           >
@@ -149,7 +149,7 @@ const Navigation = ({
       {/* Enlaces Administrador */}
       {rol === 'admin' && (
         <>
-          <div className="h-6 w-px bg-gray-200" /> {/* Separador visual del template */}
+          <div className="h-6 w-px bg-stone-300" /> {/* Separador visual del template */}
           {ADMIN_NAV_ITEMS.map(({ path, label }) => (
             <NavLink
               key={path}
@@ -157,8 +157,8 @@ const Navigation = ({
               className={({ isActive }) =>
                 `${desktopItemClasses} font-bold ${
                   isActive 
-                    ? 'text-teal-700 border-b-2 border-teal-700' 
-                    : 'text-amber-300 hover:text-teal-700'
+                    ? 'text-amber-700 border-b-2 border-amber-700' 
+                    : 'text-zinc-700 hover:text-amber-700'
                 }`
               }
             >

@@ -1,107 +1,87 @@
 import { 
-  Wrench, Sprout, Leaf, Sun, Droplet, 
-  Users, Handshake, CheckCircle, Award, Clock 
+  Building2, GraduationCap, Briefcase, 
+  ShieldCheck, PenTool, Layout, 
+  Award, Users, Clock, CheckCircle2 
 } from "lucide-react";
-
-import riegoImg from '../../assets/serviceimages/riego.jpg';
-import sensorImg from '../../assets/serviceimages/sensore.jpg';
-import ahorroagua from '../../assets/serviceimages/ahorro.jpg';
-import alberca1 from '../../assets/serviceimages/alberca1.jpg';
-import alberca2 from '../../assets/serviceimages/alberca2.jpg';
-import alberca3 from '../../assets/serviceimages/alberca3.jpg';
-import pipe1 from '../../assets/serviceimages/pipe1.jpg';
-import pipe2 from '../../assets/serviceimages/pipe2.jpg';
-import pipe3 from '../../assets/serviceimages/pipe3.jpg';
-import vu from '../../assets/serviceimages/vu.jpg';
-import plan from '../../assets/serviceimages/plan.jpg';
-import rev from '../../assets/serviceimages/rev.jpg';
-import asp1 from '../../assets/serviceimages/asper1.jpg';
-import asp2 from '../../assets/serviceimages/asper2.jpg';
-import asp3 from '../../assets/serviceimages/asper3.jpg';
-import cis1 from '../../assets/serviceimages/cisterna.jpg';
-import cis2 from '../../assets/serviceimages/cis2.jpg';
-import cis3 from '../../assets/serviceimages/cisterna3.jpg';
-
-
 
 export const services = [
   { 
-    id: "sistemas-riego",
-    icon: Droplet, 
-    title: 'Sistemas de Riego Residencial', 
-    description: 'Diseño e instalación de sistemas de riego automáticos que optimizan el consumo de agua, garantizando jardines y áreas verdes saludables.',
+    id: "mobiliario-ejecutivo",
+    icon: Briefcase, 
+    title: 'Mobiliario de Alta Dirección', 
+    description: 'Colecciones exclusivas diseñadas para despachos presidenciales y gerenciales que proyectan autoridad y elegancia.',
     items: [
-      { name: 'Riego automatizado', details: 'Control inteligente y programable por zonas para eficiencia máxima.', image: riegoImg },
-      { name: 'Sensores de humedad', details: 'Ajustes en tiempo real para evitar desperdicio de agua.', image: sensorImg },
-      { name: 'Ahorro hasta 40% de agua', details: 'Optimización de recursos sin comprometer la salud de tus plantas.', image: ahorroagua }
+      { name: 'Escritorios de Autor', details: 'Materiales nobles y acabados artesanales.', image: 'https://images.unsplash.com/photo-1585202900225-6d3ac20a6962?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Sillería Ergonómica', details: 'Soporte premium con diseño galardonado.', image: 'https://images.unsplash.com/photo-1505797149-43b0069ec26b?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Sistemas de Almacenaje', details: 'Optimización estética del espacio documental.', image: 'https://images.unsplash.com/photo-1595844730298-b960ff98fee0?q=80&w=1000&auto=format&fit=crop' }
     ],
-    color: 'from-blue-600 to-cyan-500'
+    color: 'slate-900' // Usamos nombres de colores de nuestra nueva paleta
   },
   { 
-    id: "equipos-piscinas",
-    icon: Sun, 
-    title: 'Equipos para Piscinas', 
-    description: 'Proveemos soluciones completas para mantener tu piscina en perfectas condiciones durante todo el año.',
+    id: "espacios-corporativos",
+    icon: Building2, 
+    title: 'Entornos Corporativos', 
+    description: 'Soluciones integrales para estaciones de trabajo operativas y áreas de colaboración dinámica.',
     items: [
-      { name: 'Bombas eficientes', details: 'Máximo rendimiento con bajo consumo energético.', image: alberca1 },
-      { name: 'Filtros premium', details: 'Agua cristalina y libre de impurezas constantemente.', image: alberca2 },
-      { name: 'Limpieza automática', details: 'Sistemas inteligentes que mantienen la piscina limpia sin esfuerzo.', image: alberca3 }
+      { name: 'Open Office Solutions', details: 'Diseños que fomentan la colaboración y el enfoque.', image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Panelería Acústica', details: 'Privacidad auditiva en entornos de alto tráfico.', image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Mesas de Juntas', details: 'Tecnología integrada para reuniones de alto nivel.', image: 'https://images.unsplash.com/photo-1431540015161-0bf868a2d407?q=80&w=1000&auto=format&fit=crop' }
     ],
-    color: 'from-orange-500 to-yellow-500'
+    color: 'blue-600'
   },
   { 
-    id: "plomeria-reparaciones",
-    icon: Wrench, 
-    title: 'Plomería y Reparaciones', 
-    description: 'Servicios profesionales para cualquier problema hidráulico, garantizando funcionamiento seguro y confiable.',
+    id: "equipamiento-escolar",
+    icon: GraduationCap, 
+    title: 'Equipamiento Educativo', 
+    description: 'Mobiliario diseñado para el aprendizaje activo, resistente y adaptado a nuevas metodologías pedagógicas.',
     items: [
-      { name: 'Detección de fugas', details: 'Localización precisa para reparación rápida y eficaz.', image: pipe1 },
-      { name: 'Reparaciones', details: 'Atención inmediata para emergencias en cualquier momento.', image: pipe2 },
-      { name: 'Garantía extendida', details: 'Confianza total en cada servicio realizado.', image: pipe3 }
+      { name: 'Aulas Flexibles', details: 'Mobiliario móvil para configuraciones rápidas.', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Laboratorios Especializados', details: 'Superficies técnicas de alta resistencia.', image: 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Zonas de Biblioteca', details: 'Espacios de estudio que inspiran concentración.', image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1000&auto=format&fit=crop' }
     ],
-    color: 'from-gray-600 to-slate-500'
+    color: 'slate-800'
   },
   { 
-    id: "mantenimiento-preventivo",
-    icon: Handshake, 
-    title: 'Mantenimiento Preventivo', 
-    description: 'Planes adaptados a tus necesidades para prolongar la vida útil de tus equipos y sistemas.',
+    id: "consultoria-espacios",
+    icon: Layout, 
+    title: 'Consultoría de Espacios', 
+    description: 'Análisis de flujo y optimización de metros cuadrados para maximizar su inversión inmobiliaria.',
     items: [
-      { name: 'Planes personalizados', details: 'Diseñados según el tipo y uso de tus instalaciones.', image: plan },
-      { name: 'Revisiones periódicas', details: 'Detección temprana de fallas antes de convertirse en problemas.', image: rev },
-      { name: 'Vida útil extendida', details: 'Mayor durabilidad y funcionamiento óptimo de tus sistemas.', image: vu }
+      { name: 'Layout 2D/3D', details: 'Visualización precisa antes de la ejecución.', image: 'https://images.unsplash.com/photo-1503387762-592dea58ef23?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Gestión de Proyectos', details: 'Supervisión integral de montaje y logística.', image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Interiorismo Corporativo', details: 'Curaduría de materiales y paletas de color.', image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1000&auto=format&fit=crop' }
     ],
-    color: 'from-green-600 to-emerald-500'
+    color: 'blue-700'
   },
   { 
-    id: "diseno-de-riego",
-    icon: Sprout, 
-    title: 'Riego para jardines', 
-    description: 'Transformamos tu espacio exterior en un entorno estético, funcional y sostenible.',
+    id: "diseño-especializado",
+    icon: PenTool, 
+    title: 'Mobiliario a Medida', 
+    description: 'Fabricación de piezas únicas que se adaptan a las necesidades específicas de su marca o espacio.',
     items: [
-      { name: 'Diseño personalizado', details: 'Jardines únicos adaptados a tu estilo y espacio.', image: asp1 },
-      { name: 'Riego', details: 'sistemas de riego.', image: asp2 },
-      { name: 'Sostenible', details: 'Prácticas ecológicas que promueven la conservación del medio ambiente.', image: asp3 }
+      { name: 'Recepciones de Impacto', details: 'La primera impresión de su compañía.', image: 'https://images.unsplash.com/photo-1497215842964-222b430dc094?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Carpintería Arquitectónica', details: 'Detalles en madera que definen ambientes.', image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Mobiliario de Lounge', details: 'Confort y diseño para zonas de descanso.', image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1000&auto=format&fit=crop' }
     ],
-    color: 'from-green-500 to-teal-400'
+    color: 'slate-700'
   },
   { 
-    id: "cisternas-tinacos",
-    icon: Leaf, 
-    title: 'Cisternas y Tinacos', 
-    description: 'Instalación y sanitización de tanques de agua asegurando calidad y seguridad en el suministro.',
+    id: "certificaciones-normas",
+    icon: ShieldCheck, 
+    title: 'Garantía y Normativa', 
+    description: 'Cumplimos con los estándares internacionales de ergonomía y sostenibilidad (LEED/BIFMA).',
     items: [
-      { name: 'Instalación segura', details: 'Montaje profesional para evitar fugas y problemas.', image: cis3 },
-      { name: 'Sanitización completa', details: 'Limpieza profunda certificada para agua potable.', image: cis1 },
-      { name: 'Agua limpia', details: 'Garantía de suministro confiable y saludable para tu familia.', image: cis2 }
+      { name: 'Certificación LEED', details: 'Compromiso con la sostenibilidad ambiental.', image: 'https://images.unsplash.com/photo-1449156059431-789955418929?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Ergonomía Certificada', details: 'Salud y bienestar para sus colaboradores.', image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=1000&auto=format&fit=crop' },
+      { name: 'Mantenimiento Premium', details: 'Aseguramos la vida útil de su inversión.', image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6958?q=80&w=1000&auto=format&fit=crop' }
     ],
-    color: 'from-teal-600 to-cyan-500'
+    color: 'blue-800'
   }
 ];
 
 export const whyChooseUs = [
-  { icon: Award, title: "10 Años de Experiencia", description: "Más de una década perfeccionando nuestros servicios con innovación y calidad." },
-  { icon: Users, title: "Satisfacción al cliente", description: "Una comunidad creciente que confía en nuestro compromiso y profesionalismo." },
-  { icon: Clock, title: "Servicio eficiente", description: "Disponibles cuando más nos necesitas, atención rápida y confiable." },
-  { icon: CheckCircle, title: "Garantía", description: "Respaldamos cada trabajo para ofrecer seguridad y confianza a nuestros clientes." }
+  { icon: Award, title: "Liderazgo en el Sector", description: "Más de una década equipando a las empresas más influyentes del país." },
+  { icon: Users, title: "Enfoque en Bienestar", description: "Nuestras soluciones mejoran la retención de talento y la productividad." },
+  { icon: Clock, title: "Logística Impecable", description: "Entregas programadas y montaje profesional sin interrumpir su operación." },
+  { icon: CheckCircle2, title: "Garantía DZ Premium", description: "Respaldo total en herrajes, estructuras y textiles de cada pieza." }
 ];

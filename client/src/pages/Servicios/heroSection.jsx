@@ -1,23 +1,23 @@
-import { Droplet, Sun, Sprout } from "lucide-react";
-import hero from '../../assets/images/F1.jpg'
+import React from "react";
+import { Building2, GraduationCap, Briefcase, LayoutGrid } from "lucide-react";
 
 const HeroSection = ({ isVisible }) => {
-  // Placeholder image - replace with your actual image
-  const flucsahero = hero;
+  // Imagen de oficina ejecutiva moderna
+  const officeHero =
+    "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop";
 
   return (
     <section
-      className="w-full relative overflow-hidden py-20"
-      // CAMBIO 1: Fondo blanco elegante (gris muy claro)
-      style={{ backgroundColor: "#F7F8FA" }} // Puedes usar 'white' si lo prefieres, pero este es más suave.
+      className="w-full relative overflow-hidden py-24"
+      style={{ backgroundColor: "#F8FAFC" }}
     >
-      {/* Sutil efecto de fondo (ajustados para el fondo claro) */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-gray-300/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gray-300/20 rounded-full blur-3xl"></div>
+      {/* Sutiles acentos de fondo */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100/30 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-slate-200/40 rounded-full blur-[100px]" />
 
       <div className="w-full max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-6">
-          {/* Imagen lado izquierdo */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center px-6">
+          {/* Imagen */}
           <div
             className={`animate-fade-in ${
               isVisible?.heroImage ? "visible" : ""
@@ -25,23 +25,23 @@ const HeroSection = ({ isVisible }) => {
             data-animate
             id="heroImage"
           >
-            <div className="relative">
-              <div className="relative rounded-lg overflow-hidden shadow-xl border border-gray-200">
+            <div className="relative group">
+              <div className="absolute -inset-4 border border-slate-200 translate-x-2 translate-y-2 group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-500" />
+
+              <div className="relative overflow-hidden shadow-2xl">
                 <img
-                  src={flucsahero}
-                  alt="Servicios profesionales"
-                  className="w-full h-[500px] object-cover"
+                  src={officeHero}
+                  alt="Mobiliario Ejecutivo DZ"
+                  className="w-full h-[550px] object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-700"
                 />
 
-                {/* Overlay sutil (ajustado para el fondo claro: oscuro en la imagen) */}
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
 
-                {/* Texto inferior */}
-                <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6">
-                  {/* CAMBIO 2: Borde oscuro para contraste */}
-                  <div className="border-l-4 border-gray-300 pl-4">
-                    <p className="text-white font-semibold text-lg">
-                      Compromiso con la excelencia en cada proyecto
+                <div className="absolute bottom-0 w-full p-8">
+                  <div className="border-l-2 border-blue-500 pl-6">
+                    <p className="text-white font-light text-xl tracking-wide uppercase">
+                      Espacios que <span className="font-bold">inspiran</span>{" "}
+                      éxito
                     </p>
                   </div>
                 </div>
@@ -49,93 +49,99 @@ const HeroSection = ({ isVisible }) => {
             </div>
           </div>
 
-          {/* Contenido de texto lado derecho */}
+          {/* Contenido */}
           <div
-            className={`animate-fade-in ${
-              isVisible?.hero ? "visible" : ""
-            }`}
+            className={`animate-fade-in ${isVisible?.hero ? "visible" : ""}`}
             data-animate
             id="hero"
           >
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
-                {/* CAMBIO 3: Título oscuro para fondo claro */}
-                <h1 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight leading-tight text-gray-900">
-                  Nuestros Servicios
+                <span className="text-blue-600 font-bold text-[10px] uppercase tracking-[0.4em] mb-4 block">
+                  Soluciones Integrales
+                </span>
+                <h1 className="text-5xl md:text-7xl font-light mb-6 tracking-tighter leading-none text-slate-900">
+                  Nuestra <br />
+                  <span className="font-bold text-blue-600">Especialidad</span>
                 </h1>
-                {/* CAMBIO 4: Divisor oscuro para fondo claro */}
-                <div className="w-24 h-1 bg-gray-700 mb-6"></div>
+                <div className="w-20 h-[2px] bg-slate-900" />
               </div>
 
-              {/* CAMBIO 5: Texto de párrafo oscuro para fondo claro */}
-              <p className="text-xl text-gray-700 leading-relaxed">
-                Soluciones hidráulicas y de construcción con{" "}
-                {/* CAMBIO 6: Énfasis de texto oscuro */}
-                <span className="font-semibold text-blue-700">
-                  estándares de calidad profesional
-                </span>{" "}
-                para cada necesidad de su proyecto.
+              <p className="text-xl text-slate-600 leading-relaxed font-light">
+                Diseñamos y equipamos entornos de alto rendimiento con{" "}
+                <span className="font-medium text-slate-900">
+                  mobiliario ergonómico de vanguardia
+                </span>
+                . Desde aulas dinámicas hasta despachos de alta dirección.
               </p>
 
-              {/* Categorías de servicios */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
+              {/* Categorías */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                 {[
                   {
-                    icon: Droplet,
-                    title: "Sistemas Hidráulicos",
-                    count: "3 servicios",
-                    // Mantener colores específicos en los íconos si se desea
+                    icon: Building2,
+                    title: "Corporativo",
+                    desc: "Open Office & Cowork",
+                    color: "bg-slate-900",
+                  },
+                  {
+                    icon: GraduationCap,
+                    title: "Escolar",
+                    desc: "Aulas & Bibliotecas",
                     color: "bg-blue-600",
                   },
                   {
-                    icon: Sun,
-                    title: "Mantenimiento",
-                    count: "2 servicios",
-                    color: "bg-orange-600",
-                  },
-                  {
-                    icon: Sprout,
-                    title: "Diseño & Jardines",
-                    count: "4 servicios",
-                    color: "bg-emerald-600",
+                    icon: Briefcase,
+                    title: "Ejecutivo",
+                    desc: "Alta Dirección",
+                    color: "bg-slate-800",
                   },
                 ].map((category, i) => (
                   <div
                     key={i}
-                    // CAMBIO 7: Fondo de las tarjetas blanco sólido y borde más sutil
-                    className="bg-white rounded-lg p-5 border border-gray-200 hover:shadow-lg transition-all duration-300"
+                    className="bg-white p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
-                    <div className="flex flex-col items-center text-center">
+                    <div className="flex flex-col items-start">
                       <div
-                        className={`w-14 h-14 ${category.color} rounded-lg flex items-center justify-center mb-3 shadow-lg`}
+                        className={`w-12 h-12 ${category.color} flex items-center justify-center mb-4`}
                       >
                         <category.icon
-                          className="w-7 h-7 text-white"
-                          strokeWidth={2}
+                          className="w-6 h-6 text-white"
+                          strokeWidth={1.5}
                         />
                       </div>
-                      {/* CAMBIO 8: Texto de las tarjetas oscuro */}
-                      <h3 className="font-semibold text-gray-800 mb-1 text-base">
+                      <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider mb-1">
                         {category.title}
                       </h3>
-                      {/* CAMBIO 9: Conteo de servicios oscuro */}
-                      <p className="text-sm text-gray-500">
-                        {category.count}
+                      <p className="text-[11px] text-slate-400 font-medium">
+                        {category.desc}
                       </p>
                     </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Botón */}
+              <div className="pt-6">
+                <button
+                  aria-label="Explorar líneas de diseño"
+                  className="flex items-center gap-3 text-slate-900 font-bold text-[11px] uppercase tracking-[0.2em] border-b-2 border-blue-600 pb-2 hover:text-blue-600 transition-colors"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                  Explorar Líneas de Diseño
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Animaciones */}
       <style>{`
         .animate-fade-in {
           opacity: 0;
-          transform: translateY(20px);
-          transition: all 0.6s ease-out;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .animate-fade-in.visible {

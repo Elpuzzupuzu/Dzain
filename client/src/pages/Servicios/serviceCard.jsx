@@ -1,54 +1,74 @@
-import { CheckCircle, ArrowRight } from "lucide-react";
+import React from 'react';
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ServiceCard = ({ service, isVisible, index }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    // Redirige a la página de menú de servicio según el id
     navigate(`/servicios/${service.id}`);
   };
 
   return (
     <div
       onClick={handleClick}
-      className={`group glass-card rounded-3xl p-8 shadow-lg border border-slate-100 hover-lift animate-scale-in ${
+      className={`group relative bg-white border border-slate-100 p-10 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:-translate-y-2 animate-scale-in ${
         isVisible ? "visible" : ""
       }`}
       data-animate
       id={`service-${index}`}
       style={{ animationDelay: `${index * 0.1}s`, cursor: "pointer" }}
     >
-      {/* Icono */}
-      <div
-        className={`w-16 h-16 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform sparkle`}
-      >
-        <service.icon className="w-8 h-8 text-white" />
+      {/* Indicador superior de categoría */}
+      <div className="absolute top-0 left-0 w-full h-[3px] bg-slate-50 overflow-hidden">
+        <div className="h-full bg-blue-600 w-0 group-hover:w-full transition-all duration-700 ease-in-out"></div>
       </div>
 
-      {/* Título */}
-      <h3 className="text-2xl font-bold text-[#1C2E82] mb-4 group-hover:text-[#ED0000] transition-colors">
+      {/* Icono Minimalista */}
+      <div
+        className={`w-14 h-14 bg-slate-50 text-slate-900 border border-slate-100 flex items-center justify-center mb-8 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500`}
+      >
+        <service.icon className="w-6 h-6 stroke-[1.5px]" />
+      </div>
+
+      {/* Título de la Línea de Mobiliario/Servicio */}
+      <h3 className="text-xl font-bold text-slate-900 mb-4 uppercase tracking-wider group-hover:text-blue-600 transition-colors">
         {service.title}
       </h3>
 
-      {/* Descripción */}
-      <p className="text-slate-700 leading-relaxed mb-6">{service.description}</p>
+      {/* Descripción Editorial */}
+      <p className="text-slate-500 font-light leading-relaxed mb-8 text-sm md:text-base">
+        {service.description}
+      </p>
 
-      {/* Items */}
-      <ul className="space-y-2 mb-6">
+      {/* Lista de Especificaciones */}
+      <ul className="space-y-4 mb-10">
         {service.items.map((item, idx) => (
-          <li key={idx} className="flex items-center text-sm text-slate-600">
-            <CheckCircle className="w-4 h-4 text-[#ED0000] mr-3 flex-shrink-0" />
-            {item.name}
+          <li key={idx} className="flex items-start text-[13px] text-slate-600 font-medium">
+            <CheckCircle2 className="w-4 h-4 text-blue-500 mr-3 mt-0.5 flex-shrink-0" />
+            <span className="uppercase tracking-tight">{item.name}</span>
           </li>
         ))}
       </ul>
 
-      {/* Botón */}
-      <div className="w-full bg-gradient-to-r from-slate-100 to-slate-50 text-slate-700 font-semibold py-3 px-6 rounded-xl flex items-center justify-center transition-all duration-300 group/btn">
-        <span className="mr-2">Ver Detalles</span>
-        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+      {/* Acción Final: Botón Invisible/Minimalista */}
+      <div className="flex items-center gap-2 text-slate-900 text-[11px] font-bold uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-300">
+        <span>Explorar Solución</span>
+        <ArrowRight className="w-4 h-4 text-blue-600" />
       </div>
+
+      <style>{`
+        .animate-scale-in {
+          opacity: 0;
+          transform: scale(0.95);
+          transition: all 0.7s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .animate-scale-in.visible {
+          opacity: 1;
+          transform: scale(1);
+        }
+      `}</style>
     </div>
   );
 };

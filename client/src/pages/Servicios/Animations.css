@@ -1,45 +1,50 @@
+/* Revelado suave desde abajo hacia arriba */
 .animate-fade-in-up {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(40px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1); /* Curva más profesional y lenta */
 }
 .animate-fade-in-up.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* Escala con entrada elegante (sin rebote excesivo) */
 .animate-scale-in {
   opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: scale(0.96); /* Escala más sutil para evitar saltos bruscos */
+  transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
 }
 .animate-scale-in.visible {
   opacity: 1;
   transform: scale(1);
 }
 
+/* Gradiente de texto institucional */
 .gradient-text {
-  background: linear-gradient(135deg, #1C2E82, #ED0000);
+  background: linear-gradient(135deg, #0f172a 30%, #2563eb 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* Tarjeta minimalista con efecto de elevación */
 .glass-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8); /* Slate-200 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
+/* Elevación sutil al pasar el cursor */
 .hover-lift {
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .hover-lift:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px -12px rgba(15, 23, 42, 0.12); /* Sombra color pizarra profunda */
 }
 
+/* Brillo metálico refinado (Efecto Acero/Aluminio) */
 .sparkle {
   position: relative;
   overflow: hidden;
@@ -47,18 +52,26 @@
 .sparkle::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg,
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.3),
     transparent
   );
-  transform: rotate(45deg) translateY(-100%);
-  transition: transform 0.6s;
+  transition: left 0.7s ease-in-out;
 }
 .sparkle:hover::before {
-  transform: rotate(45deg) translateY(100%);
+  left: 150%;
+}
+
+/* Estilo para los divisores arquitectónicos */
+.divider-premium {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #cbd5e1, transparent);
+  width: 100%;
+  margin: 1.5rem 0;
 }
