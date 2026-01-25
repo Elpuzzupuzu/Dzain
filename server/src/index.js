@@ -41,7 +41,7 @@ const server = http.createServer(app);
 
 const SOCKET_ALLOWED_ORIGINS = [
   "http://localhost:5173",
-  "https://Dzain.onrender.com",
+  "https://dzain-1.onrender.com",
   
 ];
 
