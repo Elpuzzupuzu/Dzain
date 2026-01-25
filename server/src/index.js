@@ -27,7 +27,7 @@ import facturaRoutes from "./routes/facturaRoutes.js"
 
 
 // =======================================================
-// 🔧 CONFIGURACIÓN INICIAL
+//  CONFIGURACIÓN INICIAL
 // =======================================================
 dotenv.config();
 
@@ -41,7 +41,7 @@ const server = http.createServer(app);
 
 const SOCKET_ALLOWED_ORIGINS = [
   "http://localhost:5173",
-  "https://dzain-1.onrender.com",
+  "https://dzain.onrender.com",
   
 ];
 
