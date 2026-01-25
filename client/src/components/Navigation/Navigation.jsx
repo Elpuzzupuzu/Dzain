@@ -6,13 +6,13 @@ import {
   Settings,
   Users,
   Phone,
-  LogIn,
   LogOut,
   User,
   LayoutDashboard,
   ListChecks,
   FileText,
   Handshake,
+  LogIn
 } from 'lucide-react';
 
 const COMMON_NAV_ITEMS = [
@@ -20,8 +20,8 @@ const COMMON_NAV_ITEMS = [
   { path: '/productos', label: 'PRODUCTOS', icon: Package },
   { path: '/servicios', label: 'SERVICIOS', icon: Settings },
   { path: '/acerca-de-nosotros', label: 'NOSOTROS', icon: Users },
-  { path: '/contacto', label: 'CONTACTO', icon: Phone },
-  { path: '/catalogo-pdfs', label: 'CATÁLOGOS', icon: FileText },
+  // { path: '/contacto', label: 'CONTACTO', icon: Phone },
+  // { path: '/catalogo-pdfs', label: 'CATÁLOGOS', icon: FileText },
 ];
 
 const USER_NAV_ITEMS = [
@@ -41,65 +41,74 @@ const Navigation = ({
   onLogout,
   rol,
 }) => {
-  // Clases base del template
-  const desktopItemClasses = "text-sm font-medium transition-colors py-4";
+  // Clases base para escritorio: Texto blanco con opacidad al 70% por defecto
+  const desktopItemClasses = "text-[13px] tracking-widest font-semibold transition-all duration-300 py-2 border-b-2";
+
+  // Función para determinar el estilo según si el link está activo o no
+  const getNavLinkClass = (isActive) => {
+    return `${desktopItemClasses} ${
+      isActive 
+        ? 'text-white border-white' // Activo: Blanco puro y borde sólido
+        : 'text-white/60 border-transparent hover:text-white hover:border-white/40' // Inactivo: Opaco, Hover: Blanco
+    }`;
+  };
 
   let allNavItems = [...COMMON_NAV_ITEMS];
   if (isLoggedIn) allNavItems = [...allNavItems, ...USER_NAV_ITEMS];
   if (rol === 'admin') allNavItems = [...allNavItems, ...ADMIN_NAV_ITEMS];
 
   // ---------------------------------------------------------
-  // VISTA MÓVIL (Mantiene estructura con colores del template)
+  // VISTA MÓVIL
   // ---------------------------------------------------------
   if (isMobile) {
     return (
-      <nav className="flex flex-col space-y-2 p-4">
+      <nav className="flex flex-col space-y-1 p-4 bg-zinc-950">
         {allNavItems.map(({ path, label, icon: Icon }) => (
           <NavLink
             key={path}
             to={path}
             onClick={onLinkClick}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md transition-all ${
+              `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 isActive
-                  ? 'bg-amber-50 text-amber-700'
-                  : 'text-zinc-700 hover:bg-stone-50 hover:text-amber-700'
+                  ? 'bg-white text-black'
+                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
               }`
             }
           >
             <Icon size={18} />
-            <span className="font-medium text-xs">{label}</span>
+            <span className="font-medium text-xs tracking-wider">{label}</span>
           </NavLink>
         ))}
 
-        <div className="border-t border-stone-200 my-2" />
+        <div className="border-t border-zinc-800 my-4" />
 
         {isLoggedIn ? (
           <>
             <NavLink
               to="/mi-cuenta"
               onClick={onLinkClick}
-              className="flex items-center gap-3 px-3 py-2 text-zinc-700 hover:text-amber-700"
+              className="flex items-center gap-3 px-4 py-3 text-zinc-400 hover:text-white"
             >
               <User size={18} />
-              <span className="font-medium text-xs">MI CUENTA</span>
+              <span className="font-medium text-xs tracking-wider">MI CUENTA</span>
             </NavLink>
             <button
               onClick={() => { onLogout(); onLinkClick(); }}
-              className="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50"
+              className="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-950/30 rounded-lg"
             >
               <LogOut size={18} />
-              <span className="font-medium text-xs">CERRAR SESIÓN</span>
+              <span className="font-medium text-xs tracking-wider">CERRAR SESIÓN</span>
             </button>
           </>
         ) : (
           <NavLink
             to="/login"
             onClick={onLinkClick}
-            className="flex items-center gap-3 px-3 py-2 text-zinc-700 hover:text-amber-700"
+            className="flex items-center gap-3 px-4 py-3 text-zinc-400 hover:text-white"
           >
             <LogIn size={18} />
-            <span className="font-medium text-xs">INICIAR SESIÓN</span>
+            <span className="font-medium text-xs tracking-wider">INICIAR SESIÓN</span>
           </NavLink>
         )}
       </nav>
@@ -107,40 +116,28 @@ const Navigation = ({
   }
 
   // ---------------------------------------------------------
-  // VISTA ESCRITORIO (Estilo exacto del Template)
+  // VISTA ESCRITORIO
   // ---------------------------------------------------------
   return (
-    <nav className="hidden lg:flex items-center space-x-8">
+    <nav className="hidden lg:flex items-center space-x-7">
       {/* Enlaces Comunes */}
       {COMMON_NAV_ITEMS.map(({ path, label }) => (
         <NavLink
           key={path}
           to={path}
-          className={({ isActive }) =>
-            `${desktopItemClasses} ${
-              isActive 
-                ? 'text-amber-700 border-b-2 border-amber-700' 
-                : 'text-zinc-700 hover:text-amber-700'
-            }`
-          }
+          className={({ isActive }) => getNavLinkClass(isActive)}
         >
           {label}
         </NavLink>
       ))}
 
-      {/* Enlaces Usuario Logueado */}
+      {/* Enlaces Usuario Logueado (No admin) */}
       {isLoggedIn && rol !== 'admin' &&
         USER_NAV_ITEMS.map(({ path, label }) => (
           <NavLink
             key={path}
             to={path}
-            className={({ isActive }) =>
-              `${desktopItemClasses} ${
-                isActive 
-                  ? 'text-amber-700 border-b-2 border-amber-700' 
-                  : 'text-amber-600 hover:text-amber-700'
-              }`
-            }
+            className={({ isActive }) => getNavLinkClass(isActive)}
           >
             {label}
           </NavLink>
@@ -149,18 +146,12 @@ const Navigation = ({
       {/* Enlaces Administrador */}
       {rol === 'admin' && (
         <>
-          <div className="h-6 w-px bg-stone-300" /> {/* Separador visual del template */}
+          <div className="h-5 w-px bg-white/20 mx-2" /> 
           {ADMIN_NAV_ITEMS.map(({ path, label }) => (
             <NavLink
               key={path}
               to={path}
-              className={({ isActive }) =>
-                `${desktopItemClasses} font-bold ${
-                  isActive 
-                    ? 'text-amber-700 border-b-2 border-amber-700' 
-                    : 'text-zinc-700 hover:text-amber-700'
-                }`
-              }
+              className={({ isActive }) => getNavLinkClass(isActive)}
             >
               {label}
             </NavLink>

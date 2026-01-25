@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { searchProducts, clearSearchResults } from "../../../features/products/productsSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SearchIcon, X } from "lucide-react";
 import debounce from "lodash.debounce";
 
@@ -14,7 +14,6 @@ const Search = () => {
   const [isFocused, setIsFocused] = useState(false);
   const containerRef = useRef(null);
 
-  // Limpiar dropdown al hacer click fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
@@ -25,7 +24,6 @@ const Search = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Debounce para búsqueda
   const debouncedSearch = useRef(
     debounce((value) => {
       if (value.trim() === "") {
@@ -45,15 +43,10 @@ const Search = () => {
   const handleClear = () => {
     setSearchTerm("");
     dispatch(clearSearchResults());
-    dispatch(clearSearchResults()); // Limpiar el estado de Redux
-    // Si el campo de búsqueda está en el móvil, puedes considerar unfocus/cerrar el dropdown también.
   };
 
   const handleSearchClick = () => {
     if (searchTerm.trim() !== "") {
-      // Opcional: navegar a la página de resultados de búsqueda completa
-      // navigate(`/search?q=${searchTerm}`); 
-      // Por ahora, solo dispara la búsqueda y mantiene el foco para mostrar el dropdown
       dispatch(searchProducts(searchTerm));
       setIsFocused(true);
     }
@@ -62,93 +55,97 @@ const Search = () => {
   const handleProductClick = (id) => {
     setIsFocused(false);
     navigate(`/productos/${id}`);
-    // Opcional: Limpiar el campo de búsqueda después de navegar
     setSearchTerm("");
   };
 
   return (
-    // CAMBIO IMPORTANTE: Quitamos el 'md:w-64' y añadimos el padding que antes estaba en el Header
-    <div className="relative w-full px-4 py-2.5" ref={containerRef}>
-      <div className="relative flex items-center">
+    <div className="relative w-full max-w-2xl mx-auto px-4 py-2" ref={containerRef}>
+      {/* Contenedor del Input - Estilo de la imagen */}
+      <div className="relative flex items-stretch bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden focus-within:ring-2 focus-within:ring-slate-200 transition-all">
+        <div className="flex items-center pl-4 text-gray-400">
+          <SearchIcon size={20} />
+        </div>
+        
         <input
           type="text"
-          placeholder="Buscar..."
+          placeholder="Busca escritorios, sillas ergonómicas..."
           value={searchTerm}
           onChange={handleChange}
           onFocus={() => setIsFocused(true)}
           onKeyPress={(e) => {
             if (e.key === "Enter") handleSearchClick();
           }}
-          // Ajuste del padding para el icono, ya que el botón de búsqueda está integrado
-          className="w-full py-2 pl-4 pr-16 rounded-full text-sm outline-none bg-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 transition-all"
+          className="w-full py-3 px-4 text-sm outline-none text-slate-700 placeholder-gray-400"
         />
-        
+
         {searchTerm && (
-          // Botón para limpiar el campo
           <button
             onClick={handleClear}
-            className="absolute right-8 top-1/2 transform -translate-y-1/2 p-1 rounded-full text-gray-400 hover:text-red-500 transition-colors"
+            className="px-2 text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <X size={16} />
+            <X size={18} />
           </button>
         )}
-        
-        {/* Botón de búsqueda (Integrado en el componente) */}
+
         <button
           onClick={handleSearchClick}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full bg-[#febd69] hover:bg-[#f3a847] text-[#131921] transition-colors"
+          className="bg-[#1a233a] hover:bg-[#121829] text-white px-6 flex items-center justify-center transition-colors"
         >
           <SearchIcon size={20} />
         </button>
       </div>
 
-      {/* Dropdown - CONDICIONAL DE RENDERIZADO (VERIFICADO) */}
-      {isFocused && searchTerm && searchResults.length > 0 && ( // <--- Agregué 'searchResults.length > 0' para evitar mostrar el div vacío si no hay resultados ni carga.
-        // El z-50 y position absolute son correctos.
-        <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto">
-          {searchLoading ? (
-            <div className="p-2 text-sm text-gray-500">Buscando...</div>
-          ) : (
-            // NOTA: La lógica de 'No se encontraron productos' ahora debe ir fuera de este bloque
-            // si quieres mostrarlo incluso cuando no haya resultados, pero manteniendo el condicional
-            // del bloque principal, es mejor dejarlo como está.
-            searchResults.map((product) => (
-              <button
-                key={product.id}
-                onClick={() => handleProductClick(product.id)}
-                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
-              >
-                {product.imagen && (
-                  <img
-                    src={product.imagen}
-                    alt={product.nombre}
-                    className="w-10 h-10 object-cover rounded-sm"
-                  />
-                )}
-                <div className="flex flex-col">
-                  <span className="text-sm">{product.nombre}</span>
-                  {product.precio !== undefined && (
-                    <span className="text-xs text-gray-500">${product.precio}</span>
+      {/* Dropdown de Resultados */}
+      {isFocused && searchTerm && (
+        <div className="absolute top-full left-4 right-4 mt-3 bg-white border border-gray-100 rounded-xl shadow-2xl z-50 overflow-hidden">
+          
+          <div className="px-5 py-3 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+              Productos Sugeridos
+            </span>
+            <button onClick={() => setIsFocused(false)} className="text-gray-400 hover:text-gray-600">
+              <X size={14} />
+            </button>
+          </div>
+
+          <div className="max-h-[350px] overflow-y-auto">
+            {searchLoading ? (
+              <div className="p-6 text-center text-sm text-gray-500 italic">Buscando en catálogo...</div>
+            ) : searchResults.length > 0 ? (
+              searchResults.map((product) => (
+                <button
+                  key={product.id}
+                  onClick={() => handleProductClick(product.id)}
+                  className="w-full flex items-center gap-4 px-5 py-4 hover:bg-slate-50 transition-colors group border-b border-gray-50 last:border-none"
+                >
+                  {product.imagen && (
+                    <div className="w-14 h-14 flex-shrink-0 bg-gray-50 rounded-lg p-1 border border-gray-100 group-hover:bg-white transition-colors">
+                      <img
+                        src={product.imagen}
+                        alt={product.nombre}
+                        className="w-full h-full object-contain mix-blend-multiply"
+                      />
+                    </div>
                   )}
-                </div>
-              </button>
-            ))
-          )}
+                  <div className="flex flex-col text-left">
+                    <span className="text-sm font-bold text-[#1a233a] group-hover:text-blue-700 transition-colors">
+                      {product.nombre}
+                    </span>
+                    {product.precio !== undefined && (
+                      <span className="text-xs font-medium text-gray-400 mt-0.5">
+                        ${product.precio}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className="p-6 text-center text-sm text-gray-400">
+                No se encontraron resultados para "{searchTerm}"
+              </div>
+            )}
+          </div>
         </div>
-      )}
-      
-      {/* Mensaje de no resultados o carga si hay foco y término, pero no hay resultados */}
-      {isFocused && searchTerm && !searchLoading && searchResults.length === 0 && (
-          <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 text-sm text-gray-500">
-              No se encontraron productos.
-          </div>
-      )}
-      
-      {/* Mensaje de carga si hay foco y término */}
-      {isFocused && searchTerm && searchLoading && (
-          <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 text-sm text-gray-500">
-              Buscando...
-          </div>
       )}
     </div>
   );

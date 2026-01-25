@@ -1,89 +1,130 @@
 import React from 'react';
-import { Facebook, Twitter, Instagram, Mail, MapPin, Phone, ArrowRight } from 'lucide-react';
+import { Facebook, Youtube, Instagram, Mail, Phone, MapPin, FileText } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-900 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <footer className="bg-neutral-900 text-gray-400">
+      <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           
-          {/* Columna 1: Branding y Descripción */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2">
-              <div className="bg-teal-600 text-white px-3 py-1 font-bold text-xl">D</div>
-              <span className="font-bold text-xl text-white tracking-wider">ZAIN</span>
-            </div>
+          {/* Brand Section */}
+          <div className="space-y-4">
+            <h2 className="text-white text-4xl font-serif italic mb-4">D'ZAIN</h2>
             <p className="text-sm leading-relaxed">
               Elevando el estándar del diseño de interiores con mobiliario de alta gama que combina confort, 
-              estética y funcionalidad para transformar tu hogar.
+              estética y funcionalidad para transformar tu hogar en un espacio único.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="hover:text-teal-400 transition-colors"><Facebook size={20} /></a>
-              <a href="#" className="hover:text-teal-400 transition-colors"><Twitter size={20} /></a>
-              <a href="#" className="hover:text-teal-400 transition-colors"><Instagram size={20} /></a>
+          </div>
+
+          {/* Recent News / Blog */}
+          <div>
+            <h3 className="text-white text-lg font-semibold mb-6 uppercase tracking-wider">Tendencias</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <FileText size={16} className="text-neutral-500 mt-1 shrink-0" />
+                <a href="#" className="hover:text-white transition-colors text-sm">
+                  Tendencias de interiorismo para el 2026
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <FileText size={16} className="text-neutral-500 mt-1 shrink-0" />
+                <a href="#" className="hover:text-white transition-colors text-sm">
+                  Cómo elegir el sofá perfecto para tu salón
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <FileText size={16} className="text-neutral-500 mt-1 shrink-0" />
+                <a href="#" className="hover:text-white transition-colors text-sm">
+                  La importancia de la iluminación natural
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <FileText size={16} className="text-neutral-500 mt-1 shrink-0" />
+                <a href="#" className="hover:text-white transition-colors text-sm">
+                  Guía de cuidado para maderas nobles
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Recent Work / Collections */}
+          <div>
+            <h3 className="text-white text-lg font-semibold mb-6 uppercase tracking-wider">Colecciones</h3>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 group cursor-pointer">
+                <div className="w-16 h-12 bg-neutral-800 rounded overflow-hidden">
+                  <img 
+                    src="/api/placeholder/80/60" 
+                    alt="Loft Minimalista" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-white font-medium text-sm">Loft Minimalista</h4>
+                  <p className="text-xs text-gray-500">Enero 2026</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 group cursor-pointer">
+                <div className="w-16 h-12 bg-neutral-800 rounded overflow-hidden">
+                  <img 
+                    src="/api/placeholder/80/60" 
+                    alt="Residencia La Calma" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-white font-medium text-sm">Residencia La Calma</h4>
+                  <p className="text-xs text-gray-500">Diciembre 2025</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Columna 2: Enlaces Rápidos */}
+          {/* Contact Us */}
           <div>
-            <h4 className="text-white font-bold mb-6 text-lg">Navegación</h4>
-            <ul className="space-y-4 text-sm">
-              <li><a href="#" className="hover:text-teal-400 transition-colors">Sobre Nosotros</a></li>
-              <li><a href="#" className="hover:text-teal-400 transition-colors">Nuestras Colecciones</a></li>
-              <li><a href="#" className="hover:text-teal-400 transition-colors">Servicios de Diseño</a></li>
-              <li><a href="#" className="hover:text-teal-400 transition-colors">Blog de Tendencias</a></li>
-            </ul>
+            <h3 className="text-white text-lg font-semibold mb-6 uppercase tracking-wider">Contacto</h3>
+            <div className="space-y-3 mb-8">
+              <p className="text-sm flex items-center gap-2">
+                <Phone size={14} className="text-white" />
+                <span className="text-gray-400">+1 234 567 890</span>
+              </p>
+              <p className="text-sm flex items-center gap-2">
+                <Mail size={14} className="text-white" />
+                <span className="text-gray-400">contacto@dzain.com</span>
+              </p>
+              <p className="text-sm flex items-start gap-2">
+                <MapPin size={14} className="text-white mt-1 shrink-0" />
+                <span className="text-gray-400">Av. Principal de Diseño #123, Ciudad Creativa</span>
+              </p>
+            </div>
+            
+            <div className="flex gap-3">
+              <a href="#" className="bg-neutral-800 hover:bg-blue-600 p-2 rounded transition-all text-white">
+                <Facebook size={18} />
+              </a>
+              <a href="#" className="bg-neutral-800 hover:bg-gradient-to-tr from-yellow-500 via-red-500 to-purple-500 p-2 rounded transition-all text-white">
+                <Instagram size={18} />
+              </a>
+              <a href="#" className="bg-neutral-800 hover:bg-red-600 p-2 rounded transition-all text-white">
+                <Youtube size={18} />
+              </a>
+            </div>
           </div>
-
-          {/* Columna 3: Contacto */}
-          <div>
-            <h4 className="text-white font-bold mb-6 text-lg">Contacto</h4>
-            <ul className="space-y-4 text-sm">
-              <li className="flex items-start space-x-3">
-                <MapPin size={18} className="text-teal-500 shrink-0" />
-                <span>Av. Principal de Diseño #123, Ciudad Creativa</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <Phone size={18} className="text-teal-500 shrink-0" />
-                <span>+1 234 567 890</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <Mail size={18} className="text-teal-500 shrink-0" />
-                <span>contacto@dzain.com</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Columna 4: Newsletter */}
-          <div>
-            <h4 className="text-white font-bold mb-6 text-lg">Newsletter</h4>
-            <p className="text-sm mb-4">Suscríbete para recibir ofertas exclusivas y consejos de diseño.</p>
-            <form className="flex flex-col space-y-2">
-              <div className="relative">
-                <input 
-                  type="email" 
-                  placeholder="Tu email" 
-                  className="w-full bg-slate-800 border border-slate-700 rounded-sm py-2 px-4 focus:outline-none focus:border-teal-500 transition-colors text-sm"
-                />
-                <button 
-                  type="submit" 
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-teal-500 hover:text-teal-400"
-                >
-                  <ArrowRight size={18} />
-                </button>
-              </div>
-            </form>
-          </div>
-
         </div>
+      </div>
 
-        {/* Línea Divisoria y Copyright */}
-        <div className="border-t border-slate-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
-          <p>© 2026 D'ZAIN MOBILIARIO. Todos los derechos reservados.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-white transition-colors">Política de Privacidad</a>
-            <a href="#" className="hover:text-white transition-colors">Términos de Servicio</a>
-          </div>
+      {/* Bottom Bar */}
+      <div className="border-t border-neutral-800">
+        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-xs text-gray-500 tracking-widest">
+            © 2026 D'ZAIN MOBILIARIO. TODOS LOS DERECHOS RESERVADOS.
+          </p>
+          <nav className="flex flex-wrap justify-center gap-8 text-xs font-medium uppercase tracking-widest">
+            <a href="#" className="hover:text-white transition-colors">Sobre Nosotros</a>
+            <a href="#" className="hover:text-white transition-colors">Colecciones</a>
+            <a href="#" className="hover:text-white transition-colors">Servicios</a>
+            <a href="#" className="hover:text-white transition-colors">Privacidad</a>
+          </nav>
         </div>
       </div>
     </footer>
