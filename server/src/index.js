@@ -41,9 +41,8 @@ const server = http.createServer(app);
 
 const SOCKET_ALLOWED_ORIGINS = [
   "http://localhost:5173",
-  "https://flucsa.onrender.com",
-  "https://www.flucsa.com.mx",
-  "https://flucsa.com.mx",
+  "https://Dzain.onrender.com",
+  
 ];
 
 const allowedOrigins = SOCKET_ALLOWED_ORIGINS;
