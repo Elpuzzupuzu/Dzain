@@ -57,7 +57,7 @@ const AboutUsPage = () => {
             <span className="italic font-light text-stone-300">entorno laboral.</span>
           </h1>
           <p className="text-xl text-stone-300 max-w-2xl leading-relaxed font-light">
-            DZ Mobiliario: 15 años transformando metros cuadrados en centros de innovación y productividad.
+            DZ Mobiliario: transformando espacios de trabajo en centros de innovación y productividad.
           </p>
         </div>
       </section>

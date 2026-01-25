@@ -15,7 +15,7 @@ const FilterToggleButton = ({ isOpen, onToggle, filterCount }) => (
         {/* Versión escritorio: Estilo minimalista oscuro */}
         <button
             onClick={onToggle}
-            className="hidden sm:flex relative items-center gap-3 px-6 py-3 bg-slate-900 hover:bg-blue-700 text-white transition-all duration-300 font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-slate-200"
+            className="hidden sm:flex relative items-center gap-3 px-6 py-3 bg-amber-600 hover:bg-slate-900 text-white transition-all duration-300 font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-slate-200"
         >
             <SlidersHorizontal className={`w-4 h-4 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} />
             <span>Filtros</span>
@@ -34,7 +34,7 @@ const FilterToggleButton = ({ isOpen, onToggle, filterCount }) => (
         >
             <SlidersHorizontal className="w-5 h-5" />
             {filterCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-orange-400 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                     {filterCount}
                 </span>
             )}

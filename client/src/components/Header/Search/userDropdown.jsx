@@ -62,10 +62,10 @@ const UserDropdown = ({
         </>
       )}
       <div className="flex flex-col leading-none">
-        <span className="text-xs text-stone-600">
+        <span className="text-xs text-white">
           Hola, {isLoggedIn ? userName.split(" ")[0] : "visitante"}
         </span>
-        <span className="text-sm font-bold text-zinc-900 whitespace-nowrap">
+        <span className="text-sm font-bold text-white whitespace-nowrap">  
           {isLoggedIn ? "Tu Cuenta" : "Identifícate"}
         </span>
       </div>
@@ -81,7 +81,7 @@ const UserDropdown = ({
       <div
         className={`p-2 rounded-md transition-all cursor-pointer ${
           isOpen
-            ? "bg-stone-100 border-stone-200"
+            ? "bg-gray-500 border-stone-200"
             : "border border-transparent hover:border-stone-200"
         }`}
       >
@@ -103,7 +103,7 @@ const UserDropdown = ({
 
           {!isLoggedIn ? (
             <div className="flex flex-col items-center p-2">
-              <p className="text-sm text-stone-600 mb-3">
+              <p className="text-sm text-white mb-3">
                 Accede o regístrate para una mejor experiencia.
               </p>
 
@@ -125,12 +125,12 @@ const UserDropdown = ({
             </div>
           ) : (
             <>
-              <h3 className="text-lg font-extrabold text-zinc-900 mb-4 border-b border-stone-200 pb-2">
+              <h3 className="text-lg font-extrabold text-gray-900 mb-4 border-b border-stone-200 pb-2">
                 ¡Bienvenido, {userName.split(" ")[0]}!
               </h3>
               <div className="flex justify-between gap-8">
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-zinc-800 mb-2 text-sm uppercase tracking-wider">
+                  <h4 className="font-bold text-white mb-2 text-sm uppercase tracking-wider">
                     Tu Cuenta
                   </h4>
                   <ul className="space-y-2">
@@ -146,7 +146,7 @@ const UserDropdown = ({
                   </ul>
                 </div>
 
-                <div className="w-px bg-stone-200"></div>
+                <div className="w-px bg-gray-700"></div>
 
                 <div className="flex-1 min-w-0">
                   <h4 className="font-bold text-zinc-800 mb-2 text-sm uppercase tracking-wider">

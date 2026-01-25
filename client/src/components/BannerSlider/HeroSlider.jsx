@@ -56,9 +56,25 @@ const HeroSlider = () => {
         onDotClick={handleDotClick}
       />
 
-      {/* Indicador visual de progreso (opcional) */}
-      <div className="absolute bottom-0 left-0 h-1 bg-blue-600 z-30 transition-all duration-[7000ms] ease-linear"
-           style={{ width: isPaused ? '0%' : '100%' }} />
+      {/* Indicador visual de progreso moderno */}
+      <div className="absolute bottom-0 left-0 w-full h-1.5 bg-white/10 z-30">
+        <div
+          key={currentSlide}
+          className={`h-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-[0_0_12px_rgba(59,130,246,0.5)] 
+            ${isPaused ? "opacity-40" : "opacity-100"}`}
+          style={{
+            animation: !isPaused ? "progress-run 7s linear forwards" : "none",
+            width: isPaused ? "0%" : "0%" // Mantiene consistencia en el reset
+          }}
+        />
+      </div>
+
+      <style jsx>{`
+        @keyframes progress-run {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+      `}</style>
     </section>
   );
 };

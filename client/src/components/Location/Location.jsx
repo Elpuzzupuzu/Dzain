@@ -12,7 +12,7 @@ const Location = () => {
   };
 
   return (
-    <section className="bg-slate-50 py-24 px-6 lg:px-12">
+    <section className="bg-neutral-900 py-24 px-6 lg:px-12">
       <div className="max-w-[1400px] mx-auto">
         
         {/* Encabezado Editorial */}
@@ -22,8 +22,8 @@ const Location = () => {
               <span className="w-8 h-[1px] bg-slate-400"></span>
               <span className="text-xs font-bold tracking-[0.3em] text-slate-500 uppercase">Presencia Local</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-light text-slate-900 leading-tight">
-              Visite nuestro <span className="font-bold">Showroom</span>
+            <h2 className="text-4xl md:text-5xl font-light text-gray-200 leading-tight">
+              Agenda tu cita <span className="font-bold">Dzain</span>
             </h2>
           </div>
           <p className="text-slate-500 text-lg font-light max-w-sm border-l border-slate-200 pl-6">

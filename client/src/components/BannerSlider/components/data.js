@@ -4,7 +4,7 @@ export const slidesData = [
     title: "Torre Corporativa Skyline",
     description: "Espacios de oficina triple A en el corazón del distrito financiero, diseñados para la máxima productividad.",
     category: "Edificio de Lujo",
-    image: "https://c.pxhere.com/photos/74/7c/entrepreneur_business_corporate_office_business_professional_meeting_professional_business_group-686805.jpg!d",
+    image: "https://wallpapers.com/images/hd/office-desk-conference-room-at-sunset-gywnnh37h4mx72oy.jpg",
     link: "/inmuebles/torre-skyline"
   },
   {
