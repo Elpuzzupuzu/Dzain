@@ -139,11 +139,11 @@ const ProductDetails = ({ onAddToCart }) => {
                 <div className="text-xs text-gray-500 space-y-2 pt-4 border-t border-gray-100">
                   <div className="flex justify-between">
                     <span>Envío desde:</span>
-                    <span className="text-gray-900 font-medium">Amazon</span>
+                    <span className="text-gray-900 font-medium">Merida , Yucatan</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Vendido por:</span>
-                    <span className="text-gray-900 font-medium">Tienda Official</span>
+                    <span className="text-gray-900 font-medium">Dzain Official</span>
                   </div>
                 </div>
               </div>
